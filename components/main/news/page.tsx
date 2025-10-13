@@ -278,7 +278,7 @@ export default function NewsPage() {
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900">
-                          YAMEIYA SKINCARE Team
+                          BLACKBOXINC SKINCARE Team
                         </div>
                         <div className="text-sm text-gray-600">Penulis</div>
                       </div>
@@ -354,7 +354,7 @@ export default function NewsPage() {
           {/* Title */}
           <h1 className="text-4xl lg:text-6xl font-bold text-[#6B6B6B] mb-6">
             Rahasia Kulit Sehat
-            <span className="block text-[#E53935]">bersama YAMEIYA</span>
+            <span className="block text-[#E53935]">bersamaBLACKBOXINC</span>
           </h1>
 
           {/* Subtitle */}
@@ -722,7 +722,7 @@ export default function NewsPage() {
             {/* Small Note */}
             <p className="text-sm text-gray-500 mt-6">
               Dengan berlangganan, Anda setuju menerima email promosi dari
-              YAMEIYA.
+              BLACKBOXINC.
             </p>
           </div>
         </div>

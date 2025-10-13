@@ -55,9 +55,9 @@ export default function WhyJoinPesantrenSection() {
         <p className="text-gray-700 max-w-2xl mx-auto mb-12">
           {" "}
           {/* Adjusted text color for consistency */}
-          Bergabung dengan YAMEIYA bukan sekadar berbelanja atau bertransaksi,
-          tapi menjadi bagian dari gerakan ekonomi syariah yang memberdayakan
-          komunitas pesantren dan masyarakat.
+          Bergabung denganBLACKBOXINC bukan sekadar berbelanja atau
+          bertransaksi, tapi menjadi bagian dari gerakan ekonomi syariah yang
+          memberdayakan komunitas pesantren dan masyarakat.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -21,7 +21,7 @@ const Hero = () => {
               <div className="inline-flex items-center gap-2 bg-[#E53935]/10 px-4 py-2 rounded-full">
                 <Sparkles className="w-4 h-4 text-[#E53935]" />
                 <span className="text-sm font-medium text-[#E53935]">
-                  Tentang YAMEIYA SKINCARE
+                  TentangBLACKBOXINC SKINCARE
                 </span>
               </div>
 
@@ -32,9 +32,10 @@ const Hero = () => {
               </h1>
 
               <p className="text-xl text-gray-600 leading-relaxed">
-                YAMEIYA SKINCARE hadir dengan rangkaian skincare yang diformulasikan
-                khusus menggunakan bahan alami pilihan dan teknologi dermatologi
-                modern untuk kulit sehat, cerah, dan bercahaya alami.
+                BLACKBOXINC SKINCARE hadir dengan rangkaian skincare yang
+                diformulasikan khusus menggunakan bahan alami pilihan dan
+                teknologi dermatologi modern untuk kulit sehat, cerah, dan
+                bercahaya alami.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">

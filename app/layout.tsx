@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "YAMEIYA",
-  description: "Raih Kulit Sehat & Bersinar dengan YAMEIYA SKINCARE",
+  description: "Raih Kulit Sehat & Bersinar denganBLACKBOXINC SKINCARE",
   icons: {
     icon: "/images/new/logo/yameiya-skincare.png",
   },

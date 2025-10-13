@@ -16,17 +16,17 @@ const FaqPage = () => {
       name: "Produk",
       items: [
         {
-          question: "Apakah produk YAMEIYA aman untuk semua jenis kulit?",
+          question: "Apakah produkBLACKBOXINC aman untuk semua jenis kulit?",
           answer:
-            "Ya, seluruh produk YAMEIYA diformulasikan dengan bahan-bahan berkualitas tinggi, dermatologically tested, dan aman untuk semua jenis kulit, termasuk kulit sensitif. Namun, kami tetap menyarankan untuk melakukan patch test sebelum pemakaian rutin.",
+            "Ya, seluruh produkBLACKBOXINC diformulasikan dengan bahan-bahan berkualitas tinggi, dermatologically tested, dan aman untuk semua jenis kulit, termasuk kulit sensitif. Namun, kami tetap menyarankan untuk melakukan patch test sebelum pemakaian rutin.",
         },
         {
-          question: "Apakah produk YAMEIYA sudah terdaftar di BPOM?",
+          question: "Apakah produkBLACKBOXINC sudah terdaftar di BPOM?",
           answer:
-            "Benar, semua produk YAMEIYA telah mendapatkan izin edar resmi dari BPOM sehingga terjamin aman digunakan.",
+            "Benar, semua produkBLACKBOXINC telah mendapatkan izin edar resmi dari BPOM sehingga terjamin aman digunakan.",
         },
         {
-          question: "Apakah YAMEIYA menggunakan bahan alami?",
+          question: "ApakahBLACKBOXINC menggunakan bahan alami?",
           answer:
             "Kami menggabungkan bahan aktif modern dengan ekstrak alami yang sudah terbukti secara klinis, seperti Niacinamide, Hyaluronic Acid, Green Tea, dan Centella Asiatica untuk hasil yang maksimal.",
         },
@@ -42,14 +42,14 @@ const FaqPage = () => {
       items: [
         {
           question:
-            "Apakah produk YAMEIYA bisa dipakai oleh ibu hamil dan menyusui?",
+            "Apakah produkBLACKBOXINC bisa dipakai oleh ibu hamil dan menyusui?",
           answer:
-            "Sebagian besar produk YAMEIYA aman digunakan oleh ibu hamil dan menyusui. Namun, untuk produk dengan kandungan tertentu seperti retinol, sebaiknya dikonsultasikan dengan dokter terlebih dahulu.",
+            "Sebagian besar produkBLACKBOXINC aman digunakan oleh ibu hamil dan menyusui. Namun, untuk produk dengan kandungan tertentu seperti retinol, sebaiknya dikonsultasikan dengan dokter terlebih dahulu.",
         },
         {
           question: "Apakah bisa digabung dengan skincare lain?",
           answer:
-            "Ya, produk YAMEIYA dapat dikombinasikan dengan skincare lain. Kami menyarankan untuk mengikuti urutan basic skincare: cleansing → toner → serum → moisturizer → sunscreen.",
+            "Ya, produkBLACKBOXINC dapat dikombinasikan dengan skincare lain. Kami menyarankan untuk mengikuti urutan basic skincare: cleansing → toner → serum → moisturizer → sunscreen.",
         },
         {
           question:
@@ -63,7 +63,7 @@ const FaqPage = () => {
       name: "Pemesanan & Pengiriman",
       items: [
         {
-          question: "Berapa lama pengiriman produk YAMEIYA?",
+          question: "Berapa lama pengiriman produkBLACKBOXINC?",
           answer:
             "Pengiriman biasanya 2–5 hari kerja untuk wilayah Jabodetabek, dan 5–10 hari kerja untuk luar pulau. Kami bekerja sama dengan ekspedisi terpercaya seperti JNE, SiCepat, dan J&T.",
         },
@@ -88,7 +88,7 @@ const FaqPage = () => {
             "Kami menerima transfer bank (BCA, Mandiri, BRI, BNI), e-wallet (OVO, GoPay, DANA, ShopeePay), kartu kredit, dan pembayaran melalui marketplace resmi kami.",
         },
         {
-          question: "Apakah aman berbelanja di website YAMEIYA?",
+          question: "Apakah aman berbelanja di websiteBLACKBOXINC?",
           answer:
             "Ya, transaksi Anda 100% aman karena diproses melalui payment gateway terpercaya dengan sistem enkripsi tingkat tinggi.",
         },
@@ -98,9 +98,9 @@ const FaqPage = () => {
       name: "Membership & Promo",
       items: [
         {
-          question: "Apakah ada program loyalitas YAMEIYA?",
+          question: "Apakah ada program loyalitasBLACKBOXINC?",
           answer:
-            "Ya! Bergabunglah dengan YAMEIYA Club untuk mengumpulkan poin dari setiap transaksi. Poin bisa ditukar dengan diskon, voucher, atau produk eksklusif.",
+            "Ya! Bergabunglah denganBLACKBOXINC Club untuk mengumpulkan poin dari setiap transaksi. Poin bisa ditukar dengan diskon, voucher, atau produk eksklusif.",
         },
         {
           question: "Apakah ada promo khusus untuk pelanggan baru?",

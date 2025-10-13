@@ -12,7 +12,6 @@ import { Button } from "../ui/button";
 import { useLogoutMutation } from "@/services/auth.service";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, menuItems }) => {
-
   const shopLogo = "/favicon.ico";
   const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
@@ -76,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, menuItems }) => {
             </div>
             <div className="ml-2">
               <h2 className="text-gray-900 text-lg font-bold font-italic">
-                YAMEIYA SKINCARE
+                BLACKBOXINC SKINCARE
               </h2>
             </div>
           </div>

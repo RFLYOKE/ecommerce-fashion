@@ -15,8 +15,8 @@ export default function Mission() {
             Visi & <span className="text-[#E53935]">Misi</span>
           </h2>
           <p className="text-lg text-[#6B6B6B] leading-relaxed mb-6">
-            YAMEIYA SKINCARE hadir untuk menghadirkan perawatan kulit terbaik dengan
-            mengutamakan kualitas, keamanan, dan inovasi.
+            BLACKBOXINC SKINCARE hadir untuk menghadirkan perawatan kulit
+            terbaik dengan mengutamakan kualitas, keamanan, dan inovasi.
           </p>
         </motion.div>
 

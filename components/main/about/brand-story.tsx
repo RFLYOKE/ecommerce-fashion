@@ -18,7 +18,7 @@ const story = [
   {
     year: "2023",
     title: "Dipercaya Ribuan Pelanggan",
-    desc: "Produk YAMEIYA SKINCARE berhasil dipercaya oleh lebih dari 10.000 pelanggan di seluruh Indonesia.",
+    desc: "ProdukBLACKBOXINC SKINCARE berhasil dipercaya oleh lebih dari 10.000 pelanggan di seluruh Indonesia.",
     icon: <Award className="w-6 h-6 text-white" />,
   },
 ];

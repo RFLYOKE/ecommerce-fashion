@@ -13,11 +13,7 @@ import {
   Award,
   ArrowRight,
 } from "lucide-react";
-import {
-  FaInstagram,
-  FaFacebookF,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { FaInstagram, FaFacebookF, FaWhatsapp } from "react-icons/fa";
 import Image from "next/image";
 
 export default function Footer() {
@@ -30,14 +26,15 @@ export default function Footer() {
 
   const faqs = [
     {
-      question: "Apakah produk YAMEIYA SKINCARE aman untuk semua jenis kulit?",
+      question:
+        "Apakah produkBLACKBOXINC SKINCARE aman untuk semua jenis kulit?",
       answer:
-        "Ya, semua produk YAMEIYA SKINCARE diformulasikan dengan bahan alami dan telah diuji dermatologi, sehingga aman digunakan untuk berbagai jenis kulit.",
+        "Ya, semua produkBLACKBOXINC SKINCARE diformulasikan dengan bahan alami dan telah diuji dermatologi, sehingga aman digunakan untuk berbagai jenis kulit.",
     },
     {
-      question: "Apakah ada sertifikasi untuk produk YAMEIYA SKINCARE?",
+      question: "Apakah ada sertifikasi untuk produkBLACKBOXINC SKINCARE?",
       answer:
-        "Produk YAMEIYA SKINCARE telah tersertifikasi BPOM dan melalui uji klinis, sehingga terjamin kualitas dan keamanannya.",
+        "ProdukBLACKBOXINC SKINCARE telah tersertifikasi BPOM dan melalui uji klinis, sehingga terjamin kualitas dan keamanannya.",
     },
   ];
 
@@ -94,7 +91,11 @@ export default function Footer() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center gap-3">
                     <MapPin className="w-4.5 h-4.5 text-[#E53935]" />
-                    <span>Jalan raya Lohbener depan kantor PEMBAYARAN PDAM LOHBENER celeng RT 18/RW 05, yameiya skincare kecamatan Lohbener kabupaten Indramayu</span>
+                    <span>
+                      Jalan raya Lohbener depan kantor PEMBAYARAN PDAM LOHBENER
+                      celeng RT 18/RW 05,BLACKBOXINC skincare kecamatan Lohbener
+                      kabupaten Indramayu
+                    </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone className="w-4 h-4 text-[#E53935]" />
@@ -185,7 +186,7 @@ export default function Footer() {
           <div className="container mx-auto px-6 lg:px-12 py-6">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
               <p>
-                © {new Date().getFullYear()} YAMEIYA SKINCARE. All rights
+                © {new Date().getFullYear()}BLACKBOXINC SKINCARE. All rights
                 reserved.
               </p>
 
@@ -193,17 +194,28 @@ export default function Footer() {
               <div className="flex flex-col sm:flex-row items-center gap-6">
                 <p className="text-gray-600 text-sm">Ikuti kami di:</p>
                 <div className="flex gap-4">
-                  <a className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-pink-500 hover:text-white"
-                    href="https://www.instagram.com/yameiya_skincare?igsh=MTN4MTE0anA2aXB4aA==" target="_blank" rel="noopener noreferrer"
+                  <a
+                    className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-pink-500 hover:text-white"
+                    href="https://www.instagram.com/yameiya_skincare?igsh=MTN4MTE0anA2aXB4aA=="
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <FaInstagram size={18} />
                   </a>
-                  <a className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-blue-600 hover:text-white"
-                    href="https://www.facebook.com/share/19mYKsot3N/" target="_blank" rel="noopener noreferrer">
+                  <a
+                    className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-blue-600 hover:text-white"
+                    href="https://www.facebook.com/share/19mYKsot3N/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaFacebookF size={18} />
                   </a>
-                  <a className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-green-500 hover:text-white"
-                    href="https://wa.me/6287726666394" target="_blank" rel="noopener noreferrer">
+                  <a
+                    className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-green-500 hover:text-white"
+                    href="https://wa.me/6287726666394"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaWhatsapp size={18} />
                   </a>
                 </div>

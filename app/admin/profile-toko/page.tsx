@@ -10,8 +10,18 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combo-box";
-import { useGetCitiesQuery, useGetDistrictsQuery, useGetProvincesQuery } from "@/services/shop/open-shop/open-shop.service";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  useGetCitiesQuery,
+  useGetDistrictsQuery,
+  useGetProvincesQuery,
+} from "@/services/shop/open-shop/open-shop.service";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Shop = {
   id: number;
@@ -334,7 +344,7 @@ export default function ShopProfilePage() {
 
         <div className="min-w-0">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            YAMEIYA
+            BLACKBOXINC
           </h1>
           <p className="text-sm text-gray-500">
             <span className="mr-2">Manajemen Toko</span>

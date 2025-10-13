@@ -80,9 +80,10 @@ export default function LoginPage() {
     agreeToTerms: false,
   });
 
-  const [forgotPasswordData, setForgotPasswordData] = useState<ForgotPasswordData>({
-    email: "",
-  });
+  const [forgotPasswordData, setForgotPasswordData] =
+    useState<ForgotPasswordData>({
+      email: "",
+    });
 
   // New state for OTP form and loading
   const [otpFormData, setOtpFormData] = useState<OtpFormData>({
@@ -192,13 +193,16 @@ export default function LoginPage() {
 
     setIsSendingResetLink(true);
     try {
-      const response = await fetch("https://cms.yameiyashop.com/api/v1/password/reset", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: forgotPasswordData.email }),
-      });
+      const response = await fetch(
+        "https://cms.yameiyashop.com/api/v1/password/reset",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: forgotPasswordData.email }),
+        }
+      );
 
       const data = await response.json();
 
@@ -206,11 +210,16 @@ export default function LoginPage() {
         setSuccessMsg(
           "Jika email terdaftar, tautan dan kode reset password akan dikirimkan. Silakan periksa email Anda dan masukkan kode di bawah."
         );
-        setOtpFormData(prev => ({ ...prev, email: forgotPasswordData.email }));
+        setOtpFormData((prev) => ({
+          ...prev,
+          email: forgotPasswordData.email,
+        }));
         setShowForgotPassword(false);
         setShowOtpForm(true);
       } else {
-        const message = data.message || "Gagal mengirim tautan reset password. Silakan coba lagi.";
+        const message =
+          data.message ||
+          "Gagal mengirim tautan reset password. Silakan coba lagi.";
         setErrors([message]);
       }
     } catch (err) {
@@ -233,7 +242,8 @@ export default function LoginPage() {
     if (!otp) newErrors.push("Kode OTP wajib diisi");
     if (!password) newErrors.push("Password baru wajib diisi");
     if (password.length < 8) newErrors.push("Password minimal 8 karakter");
-    if (password !== confirmPassword) newErrors.push("Konfirmasi password tidak sesuai");
+    if (password !== confirmPassword)
+      newErrors.push("Konfirmasi password tidak sesuai");
 
     if (newErrors.length > 0) {
       setErrors(newErrors);
@@ -242,28 +252,34 @@ export default function LoginPage() {
 
     setIsVerifyingOtp(true);
     try {
-      const response = await fetch("https://cms.yameiyashop.com/api/v1/password/reset/validate-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          otp,
-          password,
-          password_confirmation: confirmPassword,
-        }),
-      });
+      const response = await fetch(
+        "https://cms.yameiyashop.com/api/v1/password/reset/validate-otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            otp,
+            password,
+            password_confirmation: confirmPassword,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMsg("Password berhasil diubah. Silakan masuk dengan password baru Anda.");
+        setSuccessMsg(
+          "Password berhasil diubah. Silakan masuk dengan password baru Anda."
+        );
         setShowOtpForm(false);
         setIsLogin(true);
-        setLoginData(prev => ({ ...prev, email }));
+        setLoginData((prev) => ({ ...prev, email }));
       } else {
-        const message = data.message || "Gagal mengubah password. Pastikan kode OTP benar.";
+        const message =
+          data.message || "Gagal mengubah password. Pastikan kode OTP benar.";
         setErrors([message]);
       }
     } catch (err) {
@@ -273,7 +289,6 @@ export default function LoginPage() {
       setIsVerifyingOtp(false);
     }
   };
-
 
   // ===== UI
   // Conditional rendering for the new forms
@@ -369,7 +384,8 @@ export default function LoginPage() {
         </div>
       </div>
     );
-  } else if (showOtpForm) { // New condition for OTP form
+  } else if (showOtpForm) {
+    // New condition for OTP form
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#DFF19D]/20 via-[#BFF0F5]/20 to-[#F6CCD0]/20 flex items-center justify-center p-6">
         <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
@@ -381,7 +397,8 @@ export default function LoginPage() {
               Verifikasi & Atur Ulang Password
             </h2>
             <p className="text-gray-600">
-              Masukkan kode OTP yang dikirimkan ke email Anda, lalu buat password baru.
+              Masukkan kode OTP yang dikirimkan ke email Anda, lalu buat
+              password baru.
             </p>
           </div>
 
@@ -402,7 +419,7 @@ export default function LoginPage() {
               </div>
             </div>
           )}
-          
+
           {successMsg && (
             <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800">
               {successMsg}
@@ -438,7 +455,10 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={otpFormData.password}
                   onChange={(e) =>
-                    setOtpFormData((prev) => ({ ...prev, password: e.target.value }))
+                    setOtpFormData((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
                   }
                   className="w-full pl-12 pr-12 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#e84741] focus:border-transparent"
                   placeholder="Minimal 8 karakter"
@@ -468,7 +488,10 @@ export default function LoginPage() {
                   type={showConfirmPassword ? "text" : "password"}
                   value={otpFormData.confirmPassword}
                   onChange={(e) =>
-                    setOtpFormData((prev) => ({ ...prev, confirmPassword: e.target.value }))
+                    setOtpFormData((prev) => ({
+                      ...prev,
+                      confirmPassword: e.target.value,
+                    }))
                   }
                   className="w-full pl-12 pr-12 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#e84741] focus:border-transparent"
                   placeholder="Ulangi password baru"
@@ -522,7 +545,6 @@ export default function LoginPage() {
     );
   }
 
-
   // Rest of the login/register UI remains unchanged
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#DFF19D]/20 via-[#BFF0F5]/20 to-[#F6CCD0]/20 flex items-center justify-center p-6">
@@ -553,7 +575,9 @@ export default function LoginPage() {
                 <span className="text-[#e84741] font-bold text-xl">Y</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">YAMEIYA SKINCARE</h1>
+                <h1 className="text-2xl font-bold text-white">
+                  YAMEIYA SKINCARE
+                </h1>
                 <p className="text-white/80 text-sm">
                   Skincare Minimalis & Fresh
                 </p>
@@ -564,7 +588,7 @@ export default function LoginPage() {
               <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight text-white">
                 {isLogin
                   ? "Selamat Datang Kembali!"
-                  : "Bergabung dengan YAMEIYA SKINCARE"}
+                  : "Bergabung denganBLACKBOXINC SKINCARE"}
               </h2>
               <p className="text-white/80 text-lg">
                 {isLogin

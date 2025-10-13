@@ -19,7 +19,7 @@ export default function TestimonialsPage() {
       role: "Pelanggan Skincare",
       image: "/avatars/1.jpeg",
       content:
-        "Produk YAMEIYA bikin kulit aku lebih cerah dan lembap. Teksturnya ringan, gampang meresap, dan wanginya alami banget.",
+        "ProdukBLACKBOXINC bikin kulit aku lebih cerah dan lembap. Teksturnya ringan, gampang meresap, dan wanginya alami banget.",
     },
     {
       id: 2,
@@ -27,7 +27,7 @@ export default function TestimonialsPage() {
       role: "Member Premium",
       image: "/avatars/2.jpeg",
       content:
-        "Sejak rutin pakai YAMEIYA, kulitku terasa lebih sehat dan glowing. Customer service-nya juga super ramah.",
+        "Sejak rutin pakaiBLACKBOXINC, kulitku terasa lebih sehat dan glowing. Customer service-nya juga super ramah.",
     },
     {
       id: 3,
@@ -35,7 +35,7 @@ export default function TestimonialsPage() {
       role: "Pelanggan Setia",
       image: "/avatars/3.jpeg",
       content:
-        "Aku suka banget sama packaging dan kualitas produk YAMEIYA. Bener-bener brand skincare lokal yang premium.",
+        "Aku suka banget sama packaging dan kualitas produkBLACKBOXINC. Bener-bener brand skincare lokal yang premium.",
     },
   ];
 
@@ -67,7 +67,7 @@ export default function TestimonialsPage() {
             className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto"
           >
             Dengarkan pengalaman nyata dari pelanggan kami yang sudah merasakan
-            manfaat skincare YAMEIYA.
+            manfaat skincareBLACKBOXINC.
           </motion.p>
 
           {/* Testimonial Cards */}
@@ -165,8 +165,8 @@ export default function TestimonialsPage() {
             </motion.h3>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
               Gabung dengan ribuan pelanggan yang sudah merasakan manfaat
-              skincare YAMEIYA. Mulailah perjalanan kulit sehat dan glowing Anda
-              hari ini.
+              skincareBLACKBOXINC. Mulailah perjalanan kulit sehat dan glowing
+              Anda hari ini.
             </p>
             <motion.button
               onClick={goToProductPage}

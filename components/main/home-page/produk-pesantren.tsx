@@ -65,7 +65,7 @@ export default function ProdukPondokPesantrenSection() {
           Produk & Layanan Unggulan Pondok Pesantren
         </h2>
         <p className="max-w-2xl mx-auto mb-12 text-neutral-200">
-          YAMEIYA menyediakan berbagai produk unggulan dan layanan syariah
+          BLACKBOXINC menyediakan berbagai produk unggulan dan layanan syariah
           untuk mendukung kesejahteraan santri, alumni, dan masyarakat luas
           melalui ekosistem ekonomi pesantren.
         </p>

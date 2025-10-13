@@ -21,10 +21,10 @@ export const beritaList = [
   },
   {
     id: 3,
-    title: "Rapat Tahunan YAMEIYA 2025 Berjalan Sukses",
+    title: "Rapat TahunanBLACKBOXINC 2025 Berjalan Sukses",
     image: "/images/berita3.jpeg",
     content:
-      "Ratusan anggota menghadiri Rapat Anggota Tahunan YAMEIYA yang membahas evaluasi program 2024 dan rencana strategis 2025. Acara berlangsung demokratis dan transparan, memperkuat semangat gotong royong dalam pengambilan keputusan koperasi.",
+      "Ratusan anggota menghadiri Rapat Anggota TahunanBLACKBOXINC yang membahas evaluasi program 2024 dan rencana strategis 2025. Acara berlangsung demokratis dan transparan, memperkuat semangat gotong royong dalam pengambilan keputusan koperasi.",
     date: "2025-07-15",
     kategori: "Organisasi",
     isPopular: true,
@@ -44,7 +44,7 @@ export const beritaList = [
     title: "Kolaborasi Teknologi: Pondok Gandeng Startup Lokal",
     image: "/images/berita5.jpeg",
     content:
-      "Dalam rangka digitalisasi koperasi, YAMEIYA bekerja sama dengan beberapa startup teknologi untuk membangun sistem digital koperasi. Kolaborasi ini memungkinkan pengelolaan anggota, keuangan, dan pemasaran menjadi lebih efektif dan transparan.",
+      "Dalam rangka digitalisasi koperasi,BLACKBOXINC bekerja sama dengan beberapa startup teknologi untuk membangun sistem digital koperasi. Kolaborasi ini memungkinkan pengelolaan anggota, keuangan, dan pemasaran menjadi lebih efektif dan transparan.",
     date: "2025-07-12",
     kategori: "Teknologi",
     isPopular: true,
