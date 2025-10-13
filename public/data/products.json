@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "name": "Beras Premium",
+    "price": 120000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Cibinong",
+    "kategori": "Sembako",
+    "terlaris": true,
+    "terbaru": false
+  },
+  {
+    "id": 2,
+    "name": "Minyak Goreng 2L",
+    "price": 32000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Sukamakmur",
+    "kategori": "Sembako",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 3,
+    "name": "Gula Pasir 1kg",
+    "price": 14500,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Cibungbulang",
+    "kategori": "Sembako",
+    "terlaris": true,
+    "terbaru": true
+  },
+  {
+    "id": 4,
+    "name": "Sabun Cuci Piring",
+    "price": 8500,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Leuwiliang",
+    "kategori": "Kebutuhan Rumah",
+    "terlaris": true,
+    "terbaru": false
+  },
+  {
+    "id": 5,
+    "name": "Kopi Sachet 10 pcs",
+    "price": 19000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Jasinga",
+    "kategori": "Minuman",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 6,
+    "name": "Rokok Filter",
+    "price": 23000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Cileungsi",
+    "kategori": "Lainnya",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 7,
+    "name": "Telur Ayam 1kg",
+    "price": 27000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Citeureup",
+    "kategori": "Sembako",
+    "terlaris": true,
+    "terbaru": false
+  },
+  {
+    "id": 8,
+    "name": "Sabun Mandi",
+    "price": 7500,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Gunung Putri",
+    "kategori": "Kebutuhan Pribadi",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 9,
+    "name": "Shampoo 200ml",
+    "price": 18000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Dramaga",
+    "kategori": "Kebutuhan Pribadi",
+    "terlaris": true,
+    "terbaru": true
+  },
+  {
+    "id": 10,
+    "name": "Pasta Gigi 120g",
+    "price": 13000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Kemang",
+    "kategori": "Kebutuhan Pribadi",
+    "terlaris": false,
+    "terbaru": false
+  },
+  {
+    "id": 11,
+    "name": "Air Mineral 1.5L",
+    "price": 5000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Megamendung",
+    "kategori": "Minuman",
+    "terlaris": true,
+    "terbaru": false
+  },
+  {
+    "id": 12,
+    "name": "Kecap Manis 500ml",
+    "price": 12500,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Babakan Madang",
+    "kategori": "Bumbu Dapur",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 13,
+    "name": "Mie Instan 5 pack",
+    "price": 14500,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Parung",
+    "kategori": "Sembako",
+    "terlaris": true,
+    "terbaru": false
+  },
+  {
+    "id": 14,
+    "name": "Keripik Singkong",
+    "price": 10000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Tenjo",
+    "kategori": "Cemilan",
+    "terlaris": true,
+    "terbaru": true
+  },
+  {
+    "id": 15,
+    "name": "Susu Kental Manis",
+    "price": 12000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Ciampea",
+    "kategori": "Minuman",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 16,
+    "name": "Tepung Terigu 1kg",
+    "price": 11000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Tajurhalang",
+    "kategori": "Sembako",
+    "terlaris": false,
+    "terbaru": false
+  },
+  {
+    "id": 17,
+    "name": "Sarden Kaleng",
+    "price": 14000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Cigudeg",
+    "kategori": "Sembako",
+    "terlaris": true,
+    "terbaru": false
+  },
+  {
+    "id": 18,
+    "name": "Sapu Lidi",
+    "price": 10000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Bojonggede",
+    "kategori": "Peralatan Rumah",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 19,
+    "name": "Senter Kepala",
+    "price": 35000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Leuwisadeng",
+    "kategori": "Lainnya",
+    "terlaris": false,
+    "terbaru": true
+  },
+  {
+    "id": 20,
+    "name": "Kemeja Batik",
+    "price": 85000,
+    "image": "/images/product.jpeg",
+    "kecamatan": "Cariu",
+    "kategori": "Pakaian",
+    "terlaris": true,
+    "terbaru": false
+  }
+]

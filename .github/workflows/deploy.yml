@@ -1,0 +1,67 @@
+name: Auto Deploy after Push
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Deploy project
+    permissions:
+      deployments: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: "actions/checkout@v2"
+        with:
+          ref: main
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: "${{ github.token }}"
+          environment-url: ${{ vars.MY_APP }}
+          environment: production
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+      - name: Set up SSH Key and Deploy my App on Server
+        # run: |
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            cd /var/www/node/koperasi-merah-putih.naditechno.id
+            ssh-agent bash -c 'ssh-add ~/.ssh/id_ed25519; git pull'
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            yarn
+            yarn build
+            pm2 restart koperasi-merah-putih.naditechno.id
+      - name: Update deployment Status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: "${{ github.token }}"
+          environment-url: ${{ vars.MY_APP }}
+          state: "success"
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: "${{ github.token }}"
+          environment-url: ${{ vars.MY_APP }}
+          state: "failure"
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
