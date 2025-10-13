@@ -18,8 +18,8 @@ export default function ProductDetailModal({
   isOpen,
   onClose,
   product,
-  // addCart,
-}: ProductDetailProps) {
+}: // addCart,
+ProductDetailProps) {
   const { addItem, open: openCart } = useCart();
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -93,7 +93,7 @@ export default function ProductDetailModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-6xl max-h-[90vh] rounded-lg shadow-xl relative overflow-hidden">
+      <div className="bg-white w-full   max-h-[90vh] rounded-lg shadow-xl relative overflow-hidden">
         {/* Tombol Close */}
         <Button
           variant="ghost"

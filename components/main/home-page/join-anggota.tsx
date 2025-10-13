@@ -8,9 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function JoinAnggotaPage() {
   return (
-    <section
-      className="max-h-[700px] bg-green-800 py-10 md:py-0 lg:pt-16"
-    >
+    <section className="max-h-[700px] bg-green-800 py-10 md:py-0 lg:pt-16">
       <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 md:items-end lg:items-center -translate-y-44">
         {/* Left Image Section */}
         <div className="hidden md:flex justify-center bottom-0">
@@ -19,7 +17,7 @@ export default function JoinAnggotaPage() {
             alt="Gabung Koperasi"
             width={800}
             height={800}
-            className="w-full max-w-2xl md:max-w-6xl object-cover"
+            className="w-full max-w-2xl md:  object-cover"
             priority
           />
         </div>

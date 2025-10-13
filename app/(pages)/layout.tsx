@@ -29,7 +29,7 @@ export default function PagesLayout({
 
         {/* Padding-top untuk menghindari content ketutupan header saat fixed */}
         <main className={clsx(!isLoginPage && isWisataPage && "pt-20")}>
-          {children}
+          <div className="pt-40">{children}</div>
         </main>
 
         {/* Pass all necessary props to CartSidebar */}
