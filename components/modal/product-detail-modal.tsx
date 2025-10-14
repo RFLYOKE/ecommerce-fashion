@@ -14,6 +14,8 @@ import {
   Plus,
   Minus,
 } from "lucide-react";
+import Swal from "sweetalert2";
+import { Button } from "../ui/button";
 
 /** ====== Types (samakan dengan ListingProduct) ====== */
 type Product = {
@@ -352,42 +354,108 @@ export default function ProductDetailModal({
               </div>
 
               {/* CTAs */}
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-6 grid grid-cols-3 items-center gap-2">
                 <button
-                  className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 px-4 py-2.5 text-sm font-bold text-white shadow hover:from-rose-700 hover:to-rose-800"
-                  onClick={() => {
-                    if (!color || !size)
-                      return alert("Pilih warna & ukuran dulu ya.");
+                  className="col-span-2 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 px-4 py-2.5 text-sm font-bold text-white shadow hover:from-rose-700 hover:to-rose-800"
+                  onClick={async () => {
+                    if (!color || !size) {
+                      await Swal.fire({
+                        icon: "warning",
+                        title: "Pilih varian dulu",
+                        text: "Pilih warna & ukuran sebelum menambahkan ke keranjang.",
+                        confirmButtonText: "Oke",
+                        confirmButtonColor: "#e11d48",
+                      });
+                      return;
+                    }
+
                     window.dispatchEvent(
                       new CustomEvent("cart:add", {
                         detail: { ...active, color, size, qty },
                       })
                     );
-                    alert("Ditambahkan ke keranjang!");
+
+                    const Toast = Swal.mixin({
+                      toast: true,
+                      position: "top-end",
+                      showConfirmButton: false,
+                      timer: 1800,
+                      timerProgressBar: true,
+                    });
+                    await Toast.fire({
+                      icon: "success",
+                      title: "Ditambahkan ke keranjang",
+                    });
                   }}
                 >
                   Tambah ke Keranjang
                 </button>
-                <Link
-                  href={active.href}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-                >
-                  Beli Sekarang <ArrowRight className="h-4 w-4" />
-                </Link>
-                <button
-                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                  onClick={() => {
+                <Button
+                  variant="outline"
+                  onClick={async () => {
                     const shareText = `${active.name} — ${CURRENCY(
                       active.price
                     )}`;
-                    navigator.clipboard.writeText(
-                      `${shareText} ${location.origin}${active.href}`
-                    );
-                    alert("Link produk disalin.");
+                    const url = `${location.origin}${active.href}`;
+
+                    try {
+                      // Gunakan Web Share API jika tersedia
+                      if (navigator.share) {
+                        await navigator.share({
+                          title: active.name,
+                          text: shareText,
+                          url,
+                        });
+                        await Swal.fire({
+                          toast: true,
+                          position: "top-end",
+                          icon: "success",
+                          title: "Tautan dibagikan",
+                          showConfirmButton: false,
+                          timer: 1600,
+                          timerProgressBar: true,
+                        });
+                        return;
+                      }
+
+                      // Fallback: salin ke clipboard
+                      await navigator.clipboard.writeText(
+                        `${shareText} ${url}`
+                      );
+                      await Swal.fire({
+                        icon: "success",
+                        title: "Link produk disalin",
+                        text: "Tautan sudah ada di clipboard kamu.",
+                        confirmButtonText: "Oke",
+                        confirmButtonColor: "#e11d48",
+                      });
+                    } catch (err) {
+                      console.error(err);
+                      try {
+                        await navigator.clipboard.writeText(
+                          `${shareText} ${url}`
+                        );
+                        await Swal.fire({
+                          icon: "success",
+                          title: "Link produk disalin",
+                          text: "Tautan sudah ada di clipboard kamu.",
+                          confirmButtonText: "Oke",
+                          confirmButtonColor: "#e11d48",
+                        });
+                      } catch {
+                        await Swal.fire({
+                          icon: "error",
+                          title: "Gagal membagikan",
+                          text: "Coba lagi atau bagikan manual.",
+                          confirmButtonText: "Mengerti",
+                          confirmButtonColor: "#e11d48",
+                        });
+                      }
+                    }
                   }}
                 >
                   <Share2 className="h-4 w-4" /> Bagikan
-                </button>
+                </Button>
               </div>
 
               {/* Shipping & Guarantee */}
