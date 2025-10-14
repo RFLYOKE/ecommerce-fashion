@@ -400,12 +400,12 @@ export default function ShopProfilePage() {
                 value={infoForm.name}
                 onChange={handleInfoChange("name")}
               />
-              <TextField
+              {/* <TextField
                 id="slug"
                 label="Slug"
                 value={infoForm.slug}
                 onChange={handleInfoChange("slug")}
-              />
+              /> */}
               <TextField
                 id="phone"
                 label="No. HP"
@@ -419,7 +419,7 @@ export default function ShopProfilePage() {
                 value={infoForm.email ?? ""}
                 onChange={handleInfoChange("email")}
               />
-              <div className="md:col-span-2">
+              <div>
                 <Label htmlFor="address">Alamat</Label>
                 <Textarea
                   id="address"

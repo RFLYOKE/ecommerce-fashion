@@ -190,7 +190,7 @@ export default function ProductSale({
         }}
       />
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3 mb-4">
         {items.map((p) => {
           const disc = Math.max(
             0,

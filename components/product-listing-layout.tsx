@@ -694,40 +694,7 @@ export default function ProductListingLayout({
                   )}
 
                   {/* Options */}
-                  <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <div className="text-xs font-bold uppercase tracking-wider text-gray-500">
-                        Warna
-                      </div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {(active.colors ?? DEF_COLORS).map((c) => {
-                          const selected = color === c.name;
-                          return (
-                            <button
-                              key={c.name}
-                              onClick={() => setColor(c.name)}
-                              className={`relative grid h-9 w-9 place-content-center rounded-full ring-1 transition ${
-                                selected
-                                  ? "ring-rose-600 ring-2"
-                                  : "ring-gray-200 hover:ring-rose-300"
-                              }`}
-                              aria-pressed={selected}
-                              aria-label={c.name}
-                              title={c.name}
-                            >
-                              <span
-                                className="h-6 w-6 rounded-full"
-                                style={{
-                                  backgroundColor: c.hex,
-                                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,.08)",
-                                }}
-                              />
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
+                  <div className="mt-5 grid grid-cols-1">
                     <div>
                       <div className="text-xs font-bold uppercase tracking-wider text-gray-500">
                         Ukuran
