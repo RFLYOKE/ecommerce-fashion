@@ -11,14 +11,14 @@ const testimonials = [
     name: "Ayu Pratiwi",
     role: "Pelanggan",
     feedback:
-      "Setelah 2 minggu pakaiBLACKBOXINC SKINCARE, kulitku jadi lebih lembap dan cerah. Produk ini bener-bener bikin percaya diri!",
+      "Setelah 2 minggu pakaiBLACKBOXINC Shop, kulitku jadi lebih lembap dan cerah. Produk ini bener-bener bikin percaya diri!",
     image: "/avatars/1.jpeg",
   },
   {
     name: "Dewi Lestari",
     role: "Pelanggan",
     feedback:
-      "Aku punya kulit sensitif, tapi skincareBLACKBOXINC SKINCARE ternyata aman banget dan bikin kulitku glowing tanpa iritasi.",
+      "Aku punya kulit sensitif, tapi ShopBLACKBOXINC Shop ternyata aman banget dan bikin kulitku glowing tanpa iritasi.",
     image: "/avatars/2.jpeg",
   },
   {

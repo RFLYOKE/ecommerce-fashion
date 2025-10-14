@@ -1,9 +1,9 @@
 const translations = {
   "hero-title-1": "Achieve",
   "hero-title-2": "Healthy & Glowing Skin",
-  "hero-title-3": "withBLACKBOXINC SKINCARE",
+  "hero-title-3": "withBLACKBOXINC Shop",
   "hero-subtitle":
-    "Natural skincare, specially formulated to maintain hydration, brighten, and deliver real results for your skin.",
+    "Natural Shop, specially formulated to maintain hydration, brighten, and deliver real results for your skin.",
   "hero-cta-1": "Shop Now",
   "hero-cta-2": "View Collection",
   "why-title-1": "Why",
@@ -17,10 +17,10 @@ const translations = {
   "why-item-3-content": "Moisturizes, brightens, and nourishes facial skin.",
   "why-item-4-content":
     "Trusted by thousands of users for real and satisfying results.",
-  "cta-title-1": "Start Your Skincare",
+  "cta-title-1": "Start Your Shop",
   "cta-title-2": "Today",
   "cta-subtitle":
-    "Feel the hydration, brightness, and health of your skin withBLACKBOXINC SKINCARE. Discover the products that best suit your skin’s needs.",
+    "Feel the hydration, brightness, and health of your skin withBLACKBOXINC Shop. Discover the products that best suit your skin’s needs.",
   "cta-btn": "Shop Now",
   "testimony-title": "What Do They Say?",
 };

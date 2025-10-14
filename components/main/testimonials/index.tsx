@@ -16,7 +16,7 @@ export default function TestimonialsPage() {
     {
       id: 1,
       name: "Sinta, 28",
-      role: "Pelanggan Skincare",
+      role: "Pelanggan Shop",
       image: "/avatars/1.jpeg",
       content:
         "ProdukBLACKBOXINC bikin kulit aku lebih cerah dan lembap. Teksturnya ringan, gampang meresap, dan wanginya alami banget.",
@@ -35,7 +35,7 @@ export default function TestimonialsPage() {
       role: "Pelanggan Setia",
       image: "/avatars/3.jpeg",
       content:
-        "Aku suka banget sama packaging dan kualitas produkBLACKBOXINC. Bener-bener brand skincare lokal yang premium.",
+        "Aku suka banget sama packaging dan kualitas produkBLACKBOXINC. Bener-bener brand Shop lokal yang premium.",
     },
   ];
 
@@ -67,7 +67,7 @@ export default function TestimonialsPage() {
             className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto"
           >
             Dengarkan pengalaman nyata dari pelanggan kami yang sudah merasakan
-            manfaat skincareBLACKBOXINC.
+            manfaat ShopBLACKBOXINC.
           </motion.p>
 
           {/* Testimonial Cards */}
@@ -165,8 +165,8 @@ export default function TestimonialsPage() {
             </motion.h3>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
               Gabung dengan ribuan pelanggan yang sudah merasakan manfaat
-              skincareBLACKBOXINC. Mulailah perjalanan kulit sehat dan glowing
-              Anda hari ini.
+              ShopBLACKBOXINC. Mulailah perjalanan kulit sehat dan glowing Anda
+              hari ini.
             </p>
             <motion.button
               onClick={goToProductPage}

@@ -12,24 +12,32 @@ type RunningCarouselProps = {
   showDots?: boolean;
 };
 
-const DEFAULT_IMAGE =
-  "https://i.pinimg.com/1200x/dc/28/77/dc2877f08ba923ba34c8fa70bae94128.jpg";
+const DEFAULT_IMAGES = [
+  "https://8nc5ppykod.ufs.sh/f/H265ZJJzf6brtBHsuFex0OYVvL2QeijZs4TN9tB6HcnbPodI",
+  "https://8nc5ppykod.ufs.sh/f/H265ZJJzf6brTTHbttWk2QS9m61VxOA4hqLglEHIpdXWi8wU",
+  "https://8nc5ppykod.ufs.sh/f/H265ZJJzf6brlooWQpHmgY8fkG9iJeAzFQyqLh5pudMZH7l2",
+] as const;
 
 export default function RunningCarousel({
   images,
-  heightClass = "h-[360px]",
+  heightClass = "h-96",
   intervalMs = 3500,
   showArrows = true,
   showDots = true,
 }: RunningCarouselProps) {
-  const items = useMemo(
-    () =>
-      images?.length ? images : [DEFAULT_IMAGE, DEFAULT_IMAGE, DEFAULT_IMAGE],
-    [images]
-  );
+  const items = useMemo<string[]>(() => {
+    const cleaned = (images ?? []).filter(Boolean);
+    return cleaned.length ? cleaned : [...DEFAULT_IMAGES];
+  }, [images]);
+
   const [index, setIndex] = useState(0);
   const timerRef = useRef<number | null>(null);
   const [paused, setPaused] = useState(false);
+
+  // reset index jika jumlah slide berubah
+  useEffect(() => {
+    setIndex(0);
+  }, [items.length]);
 
   // autoplay
   useEffect(() => {
@@ -64,6 +72,7 @@ export default function RunningCarousel({
               alt={`Slide ${i + 1}`}
               className="h-full w-full object-cover"
               draggable={false}
+              loading="lazy"
             />
             {/* red overlay for elegance */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-rose-900/40 via-rose-800/20 to-transparent" />

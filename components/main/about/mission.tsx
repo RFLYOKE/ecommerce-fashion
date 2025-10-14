@@ -15,8 +15,8 @@ export default function Mission() {
             Visi & <span className="text-[#E53935]">Misi</span>
           </h2>
           <p className="text-lg text-[#6B6B6B] leading-relaxed mb-6">
-            BLACKBOXINC SKINCARE hadir untuk menghadirkan perawatan kulit
-            terbaik dengan mengutamakan kualitas, keamanan, dan inovasi.
+            BLACKBOXINC Shop hadir untuk menghadirkan perawatan kulit terbaik
+            dengan mengutamakan kualitas, keamanan, dan inovasi.
           </p>
         </motion.div>
 
@@ -30,8 +30,8 @@ export default function Mission() {
           <div className="bg-white shadow-lg rounded-3xl p-6 border-l-4 border-[#E53935]">
             <h3 className="text-2xl font-bold text-[#6B6B6B] mb-2">Visi</h3>
             <p className="text-[#6B6B6B]">
-              Menjadi brand skincare terpercaya yang membantu setiap individu
-              meraih kulit sehat dan bercahaya.
+              Menjadi brand Shop terpercaya yang membantu setiap individu meraih
+              kulit sehat dan bercahaya.
             </p>
           </div>
           <div className="bg-white shadow-lg rounded-3xl p-6 border-l-4 border-[#6B6B6B]">

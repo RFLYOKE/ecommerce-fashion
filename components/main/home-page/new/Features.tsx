@@ -41,7 +41,8 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="text-3xl md:text-4xl font-bold text-gray-800 mb-12"
         >
-          {t["why-title-1"]} <span className="text-[#E53935]">YAMEIYA SKINCARE</span>?
+          {t["why-title-1"]}{" "}
+          <span className="text-[#E53935]">YAMEIYA Shop</span>?
         </motion.h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">

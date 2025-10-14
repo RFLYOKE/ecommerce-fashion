@@ -47,9 +47,9 @@ const FaqPage = () => {
             "Sebagian besar produkBLACKBOXINC aman digunakan oleh ibu hamil dan menyusui. Namun, untuk produk dengan kandungan tertentu seperti retinol, sebaiknya dikonsultasikan dengan dokter terlebih dahulu.",
         },
         {
-          question: "Apakah bisa digabung dengan skincare lain?",
+          question: "Apakah bisa digabung dengan Shop lain?",
           answer:
-            "Ya, produkBLACKBOXINC dapat dikombinasikan dengan skincare lain. Kami menyarankan untuk mengikuti urutan basic skincare: cleansing → toner → serum → moisturizer → sunscreen.",
+            "Ya, produkBLACKBOXINC dapat dikombinasikan dengan Shop lain. Kami menyarankan untuk mengikuti urutan basic Shop: cleansing → toner → serum → moisturizer → sunscreen.",
         },
         {
           question:
@@ -110,7 +110,7 @@ const FaqPage = () => {
         {
           question: "Apakah ada bundle atau paket hemat?",
           answer:
-            "Kami menyediakan paket skincare bundle yang lebih hemat hingga 25%. Cek halaman promo kami untuk penawaran terbaru.",
+            "Kami menyediakan paket Shop bundle yang lebih hemat hingga 25%. Cek halaman promo kami untuk penawaran terbaru.",
         },
       ],
     },

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const stats = [
   { number: "10.000+", label: "Pelanggan Puas" },
-  { number: "50+", label: "Produk Skincare" },
+  { number: "50+", label: "Produk Shop" },
   { number: "15+", label: "Penghargaan & Sertifikasi" },
   { number: "5 Tahun", label: "Pengalaman" },
 ];
@@ -21,7 +21,7 @@ export default function Stats() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-[#6B6B6B] mb-4">
-            Pencapaian <span className="text-[#E53935]">YAMEIYA SKINCARE</span>
+            Pencapaian <span className="text-[#E53935]">YAMEIYA Shop</span>
           </h2>
           <p className="text-lg text-[#6B6B6B]">
             Bukti nyata kualitas kami yang dipercaya ribuan pelanggan.

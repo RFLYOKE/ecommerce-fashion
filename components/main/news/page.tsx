@@ -167,7 +167,7 @@ export default function NewsPage() {
               <div className="flex flex-wrap items-center gap-6 text-white/90">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4" />
-                  <span>YAMEIYA SKINCARE</span>
+                  <span>YAMEIYA Shop</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
@@ -278,7 +278,7 @@ export default function NewsPage() {
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900">
-                          BLACKBOXINC SKINCARE Team
+                          BLACKBOXINC Shop Team
                         </div>
                         <div className="text-sm text-gray-600">Penulis</div>
                       </div>
@@ -347,7 +347,7 @@ export default function NewsPage() {
           <div className="inline-flex items-center gap-2 bg-[#E53935]/10 px-4 py-2 rounded-full mb-6">
             <Sparkles className="w-4 h-4 text-[#E53935]" />
             <span className="text-sm font-medium text-[#E53935]">
-              Artikel Skincare
+              Artikel Shop
             </span>
           </div>
 
@@ -376,7 +376,7 @@ export default function NewsPage() {
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Cari artikel skincare, tips, atau produk..."
+                  placeholder="Cari artikel Shop, tips, atau produk..."
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -449,7 +449,7 @@ export default function NewsPage() {
                 {/* Konten Artikel */}
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
                   <span className="text-[#6B6B6B] font-semibold mb-3 uppercase tracking-wide">
-                    Skincare News
+                    Shop News
                   </span>
                   <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 group-hover:text-[#E53935] transition-colors leading-snug">
                     {featured.title}
@@ -462,7 +462,7 @@ export default function NewsPage() {
                   <div className="flex items-center gap-6 text-sm text-gray-500 mb-6">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
-                      <span>YAMEIYA Skincare</span>
+                      <span>YAMEIYA Shop</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
@@ -517,7 +517,7 @@ export default function NewsPage() {
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-2xl font-bold text-gray-900">
                 {selectedCategory === "Semua"
-                  ? "Semua Artikel Skincare"
+                  ? "Semua Artikel Shop"
                   : selectedCategory}
               </h3>
               <p className="text-gray-600">
@@ -561,7 +561,7 @@ export default function NewsPage() {
                     <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                       <div className="flex items-center gap-1">
                         <User className="w-4 h-4" />
-                        <span>YAMEIYA Skincare</span>
+                        <span>YAMEIYA Shop</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
@@ -699,7 +699,7 @@ export default function NewsPage() {
               Jangan Lewatkan Update Terbaru
             </h3>
             <p className="text-lg lg:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Dapatkan tips skincare, promo eksklusif, dan artikel inspiratif
+              Dapatkan tips Shop, promo eksklusif, dan artikel inspiratif
               langsung di inbox Anda setiap minggu.
             </p>
 

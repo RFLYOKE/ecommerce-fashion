@@ -1,7 +1,7 @@
 const translations = {
   "hero-title-1": "Raih Kulit",
   "hero-title-2": "Sehat & Bersinar",
-  "hero-title-3": "denganBLACKBOXINC SKINCARE",
+  "hero-title-3": "denganBLACKBOXINC Shop",
   "hero-subtitle":
     "Perawatan kulit alami, diformulasikan khusus untuk menjaga kelembapan, mencerahkan, dan memberikan hasil nyata pada kulit Anda.",
   "hero-cta-1": "Belanja Sekarang",
@@ -20,7 +20,7 @@ const translations = {
   "cta-title-1": "Mulai Perawatan Kulitmu",
   "cta-title-2": "Hari Ini",
   "cta-subtitle":
-    "Rasakan kelembapan, kecerahan, dan kesehatan kulit bersamaBLACKBOXINC SKINCARE. Temukan produk yang cocok untuk kebutuhan kulitmu.",
+    "Rasakan kelembapan, kecerahan, dan kesehatan kulit bersamaBLACKBOXINC Shop. Temukan produk yang cocok untuk kebutuhan kulitmu.",
   "cta-btn": "Belanja Sekarang",
   "testimony-title": "Apa Kata Mereka?",
 };

@@ -6,7 +6,7 @@ const story = [
   {
     year: "2018",
     title: "Awal Mula",
-    desc: "YAMEIYA SKINCARE lahir dari keresahan akan skincare yang kurang ramah kulit sensitif di Indonesia.",
+    desc: "YAMEIYA Shop lahir dari keresahan akan Shop yang kurang ramah kulit sensitif di Indonesia.",
     icon: <Heart className="w-6 h-6 text-white" />,
   },
   {
@@ -18,7 +18,7 @@ const story = [
   {
     year: "2023",
     title: "Dipercaya Ribuan Pelanggan",
-    desc: "ProdukBLACKBOXINC SKINCARE berhasil dipercaya oleh lebih dari 10.000 pelanggan di seluruh Indonesia.",
+    desc: "ProdukBLACKBOXINC Shop berhasil dipercaya oleh lebih dari 10.000 pelanggan di seluruh Indonesia.",
     icon: <Award className="w-6 h-6 text-white" />,
   },
 ];
@@ -35,11 +35,11 @@ export default function BrandStory() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-[#6B6B6B] mb-4">
-            Perjalanan <span className="text-[#E53935]">YAMEIYA SKINCARE</span>
+            Perjalanan <span className="text-[#E53935]">YAMEIYA Shop</span>
           </h2>
           <p className="text-lg text-[#6B6B6B] max-w-2xl mx-auto">
             Dari awal berdiri hingga kini, kami terus konsisten menghadirkan
-            produk skincare berkualitas yang aman dan terpercaya.
+            produk Shop berkualitas yang aman dan terpercaya.
           </p>
         </motion.div>
 

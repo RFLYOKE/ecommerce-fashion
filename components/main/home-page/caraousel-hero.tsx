@@ -73,7 +73,7 @@ export default function HeroCarousel() {
             >
               <Image
                 src={images[index]}
-                alt="YAMEIYA SKINCARE Product"
+                alt="YAMEIYA Shop Product"
                 fill
                 className="object-cover" /* penting: jaga tinggi seragam */
                 priority

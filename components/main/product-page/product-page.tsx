@@ -53,7 +53,7 @@ export default function ProductsPage() {
   } = useGetProductListQuery({
     page: currentPage,
     paginate: ITEMS_PER_PAGE,
-    product_merk_id: 1
+    product_merk_id: 1,
   });
 
   const totalPages = useMemo(() => listResp?.last_page ?? 1, [listResp]);
@@ -194,12 +194,12 @@ export default function ProductsPage() {
           </div>
 
           <h1 className="text-4xl lg:text-6xl font-bold text-[#6B6B6B] mb-6">
-            Koleksi Skincare{" "}
-            <span className="block text-[#E53935]">YAMEIYA SKINCARE</span>
+            Koleksi Shop{" "}
+            <span className="block text-[#E53935]">YAMEIYA Shop</span>
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Temukan rangkaian skincare terbaik untuk kulit sehat, segar, dan
+            Temukan rangkaian Shop terbaik untuk kulit sehat, segar, dan
             bercahaya alami.
           </p>
 
@@ -220,7 +220,7 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* ===================== Filters & Search (Skincare Theme) ===================== */}
+      {/* ===================== Filters & Search (Shop Theme) ===================== */}
       <section className="px-6 lg:px-12 mb-8">
         <div className="container mx-auto">
           <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-200">
@@ -230,7 +230,7 @@ export default function ProductsPage() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Cari skincare..."
+                  placeholder="Cari Shop..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#E53935] focus:border-transparent"

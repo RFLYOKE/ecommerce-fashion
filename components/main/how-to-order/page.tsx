@@ -65,9 +65,9 @@ export default function HowToOrderPage() {
       id: 1,
       title: "Pilih Produk / Layanan",
       description:
-        "Jelajahi koleksi skincare dan layanan perawatan kulit, lalu pilih yang sesuai kebutuhan Anda.",
+        "Jelajahi koleksi Shop dan layanan perawatan kulit, lalu pilih yang sesuai kebutuhan Anda.",
       details: [
-        "Browse kategori skincare (Facial Wash, Serum, Moisturizer, Sunscreen, dll.)",
+        "Browse kategori Shop (Facial Wash, Serum, Moisturizer, Sunscreen, dll.)",
         "Gunakan filter jenis kulit untuk rekomendasi yang lebih tepat",
         "Baca detail produk, manfaat, dan review dari pelanggan lain",
         "Untuk layanan, pilih jadwal reservasi yang tersedia",
@@ -84,7 +84,7 @@ export default function HowToOrderPage() {
       id: 2,
       title: "Review Keranjang",
       description:
-        "Periksa kembali produk skincare dan layanan yang dipilih sebelum checkout.",
+        "Periksa kembali produk Shop dan layanan yang dipilih sebelum checkout.",
       details: [
         "Klik ikon keranjang untuk melihat daftar produk & layanan",
         "Ubah quantity atau hapus item jika diperlukan",
@@ -143,7 +143,7 @@ export default function HowToOrderPage() {
       description:
         "Pesanan produk segera dikirim, dan layanan reservasi akan dikonfirmasi.",
       details: [
-        "Produk skincare akan diproses dalam 1-2 hari kerja",
+        "Produk Shop akan diproses dalam 1-2 hari kerja",
         "Untuk reservasi, Anda akan menerima notifikasi konfirmasi",
         "Update status akan dikirim via WhatsApp/Email",
         "Estimasi pengiriman produk 2-5 hari kerja",
@@ -162,7 +162,7 @@ export default function HowToOrderPage() {
       description:
         "Pantau status pesanan produk atau konfirmasi reservasi layanan.",
       details: [
-        "Login ke akun Anda di website skincare",
+        "Login ke akun Anda di website Shop",
         "Buka menu 'Pesanan Saya' untuk produk",
         "Lihat status reservasi layanan di menu 'Reservasi'",
         "Download invoice atau berikan review pengalaman",
@@ -252,7 +252,7 @@ export default function HowToOrderPage() {
         background: `linear-gradient(180deg, #FFFFFF 0%, ${THEME.primary}1A 100%)`,
       }}
     >
-      {/* ============== HERO (skincare theme) ============== */}
+      {/* ============== HERO (Shop theme) ============== */}
       <section className="relative pt-24 pb-12 px-6 lg:px-12 overflow-hidden bg-white">
         {/* bubbles blend */}
         <div className="pointer-events-none absolute inset-0">
@@ -295,7 +295,7 @@ export default function HowToOrderPage() {
           {/* Title */}
           <h1 className="text-4xl lg:text-6xl font-bold text-[#000000] mb-6">
             Cara Pesan di
-            <span className="block text-[#6B6B6B]">YAMEIYA Skincare</span>
+            <span className="block text-[#6B6B6B]">YAMEIYA Shop</span>
           </h1>
 
           {/* Subtitle */}
@@ -324,7 +324,7 @@ export default function HowToOrderPage() {
         </div>
       </section>
 
-      {/* ============== STEP NAV + CONTENT (skincare theme) ============== */}
+      {/* ============== STEP NAV + CONTENT (Shop theme) ============== */}
       <section className="px-6 lg:px-12 mb-16 bg-white pt-10">
         <div className="container mx-auto">
           <div className="text-center mb-12">

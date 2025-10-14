@@ -26,15 +26,14 @@ export default function Footer() {
 
   const faqs = [
     {
-      question:
-        "Apakah produkBLACKBOXINC SKINCARE aman untuk semua jenis kulit?",
+      question: "Apakah produkBLACKBOXINC Shop aman untuk semua jenis kulit?",
       answer:
-        "Ya, semua produkBLACKBOXINC SKINCARE diformulasikan dengan bahan alami dan telah diuji dermatologi, sehingga aman digunakan untuk berbagai jenis kulit.",
+        "Ya, semua produkBLACKBOXINC Shop diformulasikan dengan bahan alami dan telah diuji dermatologi, sehingga aman digunakan untuk berbagai jenis kulit.",
     },
     {
-      question: "Apakah ada sertifikasi untuk produkBLACKBOXINC SKINCARE?",
+      question: "Apakah ada sertifikasi untuk produkBLACKBOXINC Shop?",
       answer:
-        "ProdukBLACKBOXINC SKINCARE telah tersertifikasi BPOM dan melalui uji klinis, sehingga terjamin kualitas dan keamanannya.",
+        "ProdukBLACKBOXINC Shop telah tersertifikasi BPOM dan melalui uji klinis, sehingga terjamin kualitas dan keamanannya.",
     },
   ];
 
@@ -58,7 +57,7 @@ export default function Footer() {
                 <div className="flex items-center gap-3 mb-3">
                   <div>
                     <Image
-                      src="/images/new/logo/yameiya-skincare.png"
+                      src="/images/new/logo/yameiya-Shop.png"
                       alt="Logo"
                       width={75}
                       height={40}
@@ -93,7 +92,7 @@ export default function Footer() {
                     <MapPin className="w-4.5 h-4.5 text-[#E53935]" />
                     <span>
                       Jalan raya Lohbener depan kantor PEMBAYARAN PDAM LOHBENER
-                      celeng RT 18/RW 05,BLACKBOXINC skincare kecamatan Lohbener
+                      celeng RT 18/RW 05,BLACKBOXINC Shop kecamatan Lohbener
                       kabupaten Indramayu
                     </span>
                   </div>
@@ -103,7 +102,7 @@ export default function Footer() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Mail className="w-4 h-4 text-[#E53935]" />
-                    <span>yameiyaskincare@gmail.com</span>
+                    <span>yameiyaShop@gmail.com</span>
                   </div>
                 </div>
               </div>
@@ -186,7 +185,7 @@ export default function Footer() {
           <div className="container mx-auto px-6 lg:px-12 py-6">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
               <p>
-                © {new Date().getFullYear()}BLACKBOXINC SKINCARE. All rights
+                © {new Date().getFullYear()}BLACKBOXINC Shop. All rights
                 reserved.
               </p>
 
@@ -196,7 +195,7 @@ export default function Footer() {
                 <div className="flex gap-4">
                   <a
                     className="w-10 h-10 bg-white border border-gray-200 rounded-2xl flex items-center justify-center text-gray-600 hover:bg-pink-500 hover:text-white"
-                    href="https://www.instagram.com/yameiya_skincare?igsh=MTN4MTE0anA2aXB4aA=="
+                    href="https://www.instagram.com/yameiya_Shop?igsh=MTN4MTE0anA2aXB4aA=="
                     target="_blank"
                     rel="noopener noreferrer"
                   >

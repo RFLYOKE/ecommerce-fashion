@@ -21,21 +21,20 @@ const Hero = () => {
               <div className="inline-flex items-center gap-2 bg-[#E53935]/10 px-4 py-2 rounded-full">
                 <Sparkles className="w-4 h-4 text-[#E53935]" />
                 <span className="text-sm font-medium text-[#E53935]">
-                  TentangBLACKBOXINC SKINCARE
+                  TentangBLACKBOXINC Shop
                 </span>
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Skincare Premium
+                Shop Premium
                 <span className="block text-[#6B6B6B]">Untuk Kulit</span>
                 <span className="block text-[#E53935]">Sehat & Bersinar</span>
               </h1>
 
               <p className="text-xl text-gray-600 leading-relaxed">
-                BLACKBOXINC SKINCARE hadir dengan rangkaian skincare yang
-                diformulasikan khusus menggunakan bahan alami pilihan dan
-                teknologi dermatologi modern untuk kulit sehat, cerah, dan
-                bercahaya alami.
+                BLACKBOXINC Shop hadir dengan rangkaian Shop yang diformulasikan
+                khusus menggunakan bahan alami pilihan dan teknologi dermatologi
+                modern untuk kulit sehat, cerah, dan bercahaya alami.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -69,7 +68,7 @@ const Hero = () => {
               <div className="relative w-full h-[600px] rounded-3xl overflow-hidden shadow-2xl">
                 <Image
                   src="/images/new/hero/yameiya-night-cream.webp"
-                  alt="YAMEIYA SKINCARE Story"
+                  alt="YAMEIYA Shop Story"
                   fill
                   className="object-cover"
                   priority

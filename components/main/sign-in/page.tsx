@@ -575,12 +575,8 @@ export default function LoginPage() {
                 <span className="text-[#e84741] font-bold text-xl">Y</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">
-                  YAMEIYA SKINCARE
-                </h1>
-                <p className="text-white/80 text-sm">
-                  Skincare Minimalis & Fresh
-                </p>
+                <h1 className="text-2xl font-bold text-white">YAMEIYA Shop</h1>
+                <p className="text-white/80 text-sm">Shop Minimalis & Fresh</p>
               </div>
             </div>
 
@@ -588,12 +584,12 @@ export default function LoginPage() {
               <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight text-white">
                 {isLogin
                   ? "Selamat Datang Kembali!"
-                  : "Bergabung denganBLACKBOXINC SKINCARE"}
+                  : "Bergabung denganBLACKBOXINC Shop"}
               </h2>
               <p className="text-white/80 text-lg">
                 {isLogin
                   ? "Masuk untuk melanjutkan rutinitas perawatan kulit Anda dengan produk minimalis dan aman."
-                  : "Daftar sekarang dan nikmati pengalaman skincare yang bersih, aman, dan efektif."}
+                  : "Daftar sekarang dan nikmati pengalaman Shop yang bersih, aman, dan efektif."}
               </p>
             </div>
 
@@ -621,7 +617,7 @@ export default function LoginPage() {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-white">50+</div>
-                <div className="text-white/50 text-sm">Produk Skincare</div>
+                <div className="text-white/50 text-sm">Produk Shop</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-white">4.9</div>

@@ -325,7 +325,8 @@ export default function Header() {
 
   // Recalc nav height (includes marquee)
   useEffect(() => {
-    const recalc = () => setNavHeight(navRef.current?.getBoundingClientRect().height ?? 0);
+    const recalc = () =>
+      setNavHeight(navRef.current?.getBoundingClientRect().height ?? 0);
     recalc();
     const ro = new ResizeObserver(recalc);
     if (navRef.current) ro.observe(navRef.current);
@@ -338,9 +339,13 @@ export default function Header() {
   }, [isScrolled]);
 
   // Close search on route change or ESC
-  useEffect(() => { setIsSearchOpen(false); }, [pathname]);
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsSearchOpen(false); };
+    setIsSearchOpen(false);
+  }, [pathname]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsSearchOpen(false);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -418,10 +423,18 @@ export default function Header() {
 
             {/* Center brand (Blackboxinc) */}
             <div className="flex items-center justify-center">
-              <Link href="/" className="group inline-flex flex-col items-center text-center select-none">
+              <Link
+                href="/"
+                className="group inline-flex flex-col items-center text-center select-none"
+              >
                 {/* If you want to keep image, show it subtle; else rely on text brand */}
                 <div className="sr-only">
-                  <Image src="/images/new/logo/yameiya-skincare.png" alt="BLACKBOXINC" width={120} height={48} />
+                  <Image
+                    src="/images/new/logo/yameiya-Shop.png"
+                    alt="BLACKBOXINC"
+                    width={120}
+                    height={48}
+                  />
                 </div>
                 <h1 className="font-extrabold tracking-[0.15em] text-gray-900 text-lg md:text-xl leading-none">
                   BLACKBOXINC
@@ -453,7 +466,9 @@ export default function Header() {
                 aria-label="Toggle language"
               >
                 <Globe className="w-4 h-4 text-gray-700" />
-                <span className="text-sm font-bold text-gray-700">{language.toUpperCase()}</span>
+                <span className="text-sm font-bold text-gray-700">
+                  {language.toUpperCase()}
+                </span>
               </button>
 
               {/* Cart */}
@@ -525,7 +540,11 @@ export default function Header() {
             style={{ top: navHeight }}
           >
             <div className="mx-auto max-w-3xl px-4 md:px-6">
-              <SearchEngine className="w-full" autoFocus autoFocusShortcut={false} />
+              <SearchEngine
+                className="w-full"
+                autoFocus
+                autoFocusShortcut={false}
+              />
             </div>
           </div>
         </>
@@ -548,7 +567,9 @@ export default function Header() {
           <div className="p-6 border-b border-gray-200 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <h2 className="font-extrabold tracking-[0.15em]">BLACKBOXINC</h2>
+                <h2 className="font-extrabold tracking-[0.15em]">
+                  BLACKBOXINC
+                </h2>
                 <p className="text-xs text-gray-500">{t.tagline}</p>
               </div>
               <button
@@ -561,7 +582,10 @@ export default function Header() {
             </div>
 
             {/* Mobile Search */}
-            <SearchEngine className="w-full" placeholder="Cari di Blackboxinc…" />
+            <SearchEngine
+              className="w-full"
+              placeholder="Cari di Blackboxinc…"
+            />
           </div>
 
           {/* Mobile Menu Items */}
@@ -578,10 +602,14 @@ export default function Header() {
                 }`}
                 style={{
                   animationDelay: `${index * 50}ms`,
-                  animation: isMobileMenuOpen ? "slideInRight 0.3s ease-out forwards" : "none",
+                  animation: isMobileMenuOpen
+                    ? "slideInRight 0.3s ease-out forwards"
+                    : "none",
                 }}
               >
-                <span className="flex-1 uppercase tracking-[0.12em]">{item.name}</span>
+                <span className="flex-1 uppercase tracking-[0.12em]">
+                  {item.name}
+                </span>
                 {pathname.startsWith(item.href) && (
                   <div className="w-1 h-6 bg-gray-600 rounded-full shadow-sm" />
                 )}
@@ -614,12 +642,24 @@ export default function Header() {
 
       <style jsx>{`
         @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(20px); }
-          to   { opacity: 1; transform: translateX(0); }
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
         }
         @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </>
