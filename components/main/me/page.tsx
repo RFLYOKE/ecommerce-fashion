@@ -787,7 +787,7 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl p-6 shadow-xl border border-gray-200 sticky top-24">
             <div className="text-center mb-6 pb-6 border-b border-gray-200">
               {/* Avatar B&W */}
-              <div className="relative w-24 h-24 mx-auto mb-4 border-4 border-black rounded-full overflow-hidden">
+              <div className="relative w-24 h-24 mx-auto mb-4 border-4 border-black rounded-full">
                 <Image
                   src={imgSrc}
                   alt={userProfile.fullName || "Avatar"}

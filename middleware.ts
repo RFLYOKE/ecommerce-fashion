@@ -46,7 +46,7 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   if (!token) {
-    if (pathname === "/me" || pathname === "/cart") {
+    if (pathname === "/me") {
       return redirectCustomer(req);
     }
     return redirectToLogin(req);
@@ -61,5 +61,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/me", "/cart"],
+  matcher: ["/admin/:path*", "/me"],
 };

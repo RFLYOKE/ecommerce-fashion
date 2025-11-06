@@ -27,8 +27,39 @@ import {
 import DotdLoader from "@/components/loader/3dot";
 import useCart from "@/hooks/use-cart";
 import clsx from "clsx";
+import VariantPickerModal from "@/components/variant-picker-modal";
 
-// --- Suspense-safe reader untuk search params ---
+/* =========================
+   Small typed helpers
+========================= */
+// type guard kecil
+const isKeyedObject = (o: unknown): o is Record<string, unknown> =>
+  !!o && typeof o === "object";
+
+// overloads: hasil tergantung 'kind'
+function getProp(obj: unknown, key: string, kind: "number"): number | undefined;
+function getProp(obj: unknown, key: string, kind: "string"): string | undefined;
+function getProp(
+  obj: unknown,
+  key: string,
+  kind: "number" | "string"
+): number | string | undefined {
+  if (!isKeyedObject(obj)) return undefined;
+  const v = obj[key];
+  if (kind === "number") return typeof v === "number" ? v : undefined;
+  return typeof v === "string" ? v : undefined;
+}
+
+
+const getNumberProp = (obj: unknown, key: string): number | undefined =>
+  getProp(obj, key, "number");
+const getStringProp = (obj: unknown, key: string): string | undefined =>
+  getProp(obj, key, "string");
+
+type MediaObj = { original_url: string };
+type MaybeWithMedia = { media?: MediaObj[] };
+
+/* ---------- Suspense-safe reader ---------- */
 function SearchParamsReader({
   onChange,
 }: {
@@ -41,7 +72,7 @@ function SearchParamsReader({
   return null;
 }
 
-// Simple StarRating component
+/* ---------- Star rating ---------- */
 function StarRating({ value }: { value: number }) {
   return (
     <span className="flex items-center gap-1">
@@ -60,14 +91,12 @@ function StarRating({ value }: { value: number }) {
 }
 
 type ViewMode = "grid" | "list";
-
 type PriceRange =
   | "all"
   | "under-100k"
   | "100k-200k"
   | "200k-500k"
   | "above-500k";
-
 type SortKey =
   | "featured"
   | "price-low"
@@ -83,7 +112,6 @@ export interface ProductVariant {
   stock: number | string;
   sku?: string | null;
 }
-
 type SelectedVariant = {
   id?: number;
   price?: number | string;
@@ -95,13 +123,16 @@ const isVariantArray = (v: unknown): v is ProductVariant[] =>
   Array.isArray(v) &&
   v.every(
     (o) =>
-      o &&
+      !!o &&
       typeof o === "object" &&
       "id" in o &&
       "name" in o &&
       "price" in o &&
       "stock" in o
   );
+
+const IMG_FALLBACK =
+  "https://via.placeholder.com/400x400/000000/FFFFFF?text=BLACKBOXINC";
 
 const formatDate = (d: Date) =>
   d.toLocaleDateString("id-ID", { day: "2-digit", month: "short" });
@@ -113,7 +144,6 @@ const etaRange = () => {
   return `${formatDate(a)} – ${formatDate(b)}`;
 };
 
-// Placeholder for unprovided component
 const FilterBlocks = ({ children }: { children: React.ReactNode }) => (
   <>{children}</>
 );
@@ -164,11 +194,16 @@ const Button = ({
   </button>
 );
 
-const IMG_FALLBACK =
-  "https://via.placeholder.com/400x400/000000/FFFFFF?text=BLACKBOXINC";
-
+/* ---------- Utils ---------- */
+const toNumber = (val: number | string): number => {
+  if (typeof val === "number") return val;
+  const parsed = parseFloat(val);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
 const formatQueryToTitle = (q: string | null): string => {
   if (!q) return "Semua Produk";
+  if (q === "new-arrivals") return "New Arrivals";
+  if (q === "best-seller") return "Best Seller";
   const spaced = q.replace(/-/g, " ").trim();
   return spaced
     .split(/\s+/)
@@ -177,27 +212,36 @@ const formatQueryToTitle = (q: string | null): string => {
 };
 
 export default function ProductsPage() {
-  // --- baca search params via Suspense ---
+  /* ---------- Search params ---------- */
   const [sp, setSp] = useState<URLSearchParams | null>(null);
-  const rawQuery = sp?.get("q") ?? null;
+  const rawQ = sp?.get("q") ?? null;
 
-  const dynamicTitle = useMemo(() => formatQueryToTitle(rawQuery), [rawQuery]);
+  type Mode = "all" | "new" | "best";
+  const mode: Mode =
+    rawQ === "new-arrivals" ? "new" : rawQ === "best-seller" ? "best" : "all";
+  const urlSearchTerm = mode === "all" ? rawQ ?? "" : "";
 
+  const [variantModalOpen, setVariantModalOpen] = useState(false);
+  const [variantProduct, setVariantProduct] = useState<Product | null>(null);
+
+  const dynamicTitle = useMemo(() => formatQueryToTitle(rawQ), [rawQ]);
+
+  /* ---------- Local states ---------- */
   const [currentPage, setCurrentPage] = useState(1);
-  const [query, setQuery] = useState(""); // Unified search term
+  const [query, setQuery] = useState(urlSearchTerm);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [selectedVariant, setSelectedVariant] =
     useState<SelectedVariant | null>(null);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [wishlist, setWishlist] = useState<number[]>([]);
-  const [drawerOpen, setDrawerOpen] = useState(false); // Mobile filter state
-  const isPriceRange = (v: string): v is PriceRange =>
-    ["all", "under-100k", "100k-200k", "200k-500k", "above-500k"].includes(
-      v as PriceRange
-    );
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // State for Filtering/Sorting
+  useEffect(() => {
+    setQuery(urlSearchTerm);
+    setCurrentPage(1);
+  }, [urlSearchTerm]);
+
   const [filter, setFilter] = useState<{
     category: string;
     priceRange: PriceRange;
@@ -210,30 +254,34 @@ export default function ProductsPage() {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [onlyDiscount, setOnlyDiscount] = useState(false);
 
-  // Cart actions
   const { addItem } = useCart();
 
-  // === Pagination from API ===
+  /* ---------- API bindings ---------- */
   const ITEMS_PER_PAGE = 9;
 
-  const {
-    data: listResp,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetProductListQuery({
+  const orderBy =
+    mode === "new"
+      ? "updated_at"
+      : mode === "best"
+      ? "products.sales"
+      : undefined;
+  const order: "asc" | "desc" | undefined = orderBy ? "desc" : undefined;
+
+  const { data: listResp, isLoading } = useGetProductListQuery({
     page: currentPage,
     paginate: ITEMS_PER_PAGE,
+    orderBy,
+    order,
+    search: urlSearchTerm || undefined,
   });
 
   const { data: categoryResp } = useGetCategoryListQuery({
-    page: currentPage,
-    paginate: ITEMS_PER_PAGE,
+    page: 1,
+    paginate: 100,
   });
 
-  // categoryOptions: array of category names, fallback to static if API fails
   const categoryOptions = useMemo(() => {
-    if (categoryResp && categoryResp.data && Array.isArray(categoryResp.data)) {
+    if (categoryResp?.data && Array.isArray(categoryResp.data)) {
       return categoryResp.data.map((cat: { name: string }) => cat.name);
     }
     return ["T-Shirts", "Hoodies", "Pants", "Footwear", "Bags", "Accessories"];
@@ -241,31 +289,21 @@ export default function ProductsPage() {
 
   const [activeImg, setActiveImg] = useState(0);
   const totalPages = useMemo(() => listResp?.last_page ?? 1, [listResp]);
-  const products = useMemo(() => listResp?.data ?? [], [listResp]);
+  const products = useMemo<Product[]>(() => listResp?.data ?? [], [listResp]);
   const [qty, setQty] = useState(1);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
 
-  // === Detail by slug (modal) ===
   const { data: detailProduct, isLoading: isDetailLoading } =
-    useGetProductBySlugQuery(selectedSlug ?? "", {
-      skip: !selectedSlug,
-    });
-
+    useGetProductBySlugQuery(selectedSlug ?? "", { skip: !selectedSlug });
   const { data: detailProductVariant, isLoading: isDetailVariantLoading } =
     useGetProductVariantBySlugQuery(selectedSlug ?? "", {
       skip: !selectedSlug,
     });
 
-  const toNumber = (val: number | string): number => {
-    if (typeof val === "number") return val;
-    const parsed = parseFloat(val);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
-
   const variants = useMemo<ProductVariant[]>(() => {
-    const maybe = detailProductVariant as unknown as { data?: unknown };
-    return isVariantArray(maybe?.data) ? maybe.data : [];
+    const maybe = (detailProductVariant as unknown as { data?: unknown })?.data;
+    return isVariantArray(maybe) ? maybe : [];
   }, [detailProductVariant]);
 
   const currentPrice = toNumber(
@@ -295,9 +333,13 @@ export default function ProductsPage() {
       typeof priceOverride !== "undefined" ? priceOverride : product.price
     );
     addItem({ ...product, price: priceNum }, variantId);
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined")
       window.dispatchEvent(new CustomEvent("cartUpdated"));
-    }
+  };
+
+  const openVariantModalFor = (p: Product) => {
+    setVariantProduct(p);
+    setVariantModalOpen(true);
   };
 
   const openProductModal = (p: Product) => {
@@ -305,7 +347,7 @@ export default function ProductsPage() {
     setIsModalOpen(true);
   };
 
-  // Modal lifecycle hooks
+  /* ---------- Modal lifecycle ---------- */
   useEffect(() => {
     document.body.style.overflow = isModalOpen ? "hidden" : "";
     if (isModalOpen && detailProduct) {
@@ -343,27 +385,23 @@ export default function ProductsPage() {
         }
       }
     };
-    if (isModalOpen) {
-      window.addEventListener("keydown", onKey);
-    }
+    if (isModalOpen) window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
   }, [isModalOpen, detailProduct, variants.length]);
 
-  // Helpers
+  /* ---------- Helpers ---------- */
   const getImageUrl = (p: Product): string => {
     if (typeof p.image === "string" && p.image) return p.image;
-    const media = (p as unknown as { media?: Array<{ original_url: string }> })
-      .media;
-    if (Array.isArray(media) && media.length > 0 && media[0]?.original_url) {
+    const media = (p as unknown as MaybeWithMedia).media;
+    if (Array.isArray(media) && media.length > 0 && media[0]?.original_url)
       return media[0].original_url;
-    }
     return IMG_FALLBACK;
   };
 
-  // === FILTER & SORT ===
+  /* ---------- Client-side filter/sort ---------- */
   const filteredProducts = useMemo(() => {
     const term = query.trim().toLowerCase();
     let data = products;
@@ -371,14 +409,12 @@ export default function ProductsPage() {
     data = data.filter((p) => {
       const price = toNumber(p.price);
       const stock = toNumber(p.stock);
-
       const matchSearch =
+        !term ||
         p.name.toLowerCase().includes(term) ||
         p.category_name.toLowerCase().includes(term);
-
       const matchCategory =
         filter.category === "all" || p.category_name === filter.category;
-
       const matchPrice =
         filter.priceRange === "all" ||
         (filter.priceRange === "under-100k" && price < 100_000) ||
@@ -389,9 +425,12 @@ export default function ProductsPage() {
           price > 200_000 &&
           price <= 500_000) ||
         (filter.priceRange === "above-500k" && price > 500_000);
-
       const matchStock = inStockOnly ? stock > 0 : true;
-      const matchDiscount = onlyDiscount ? p.was && p.was > p.price : true;
+
+      const was = getNumberProp(p, "was"); // optional price-before
+      const matchDiscount = onlyDiscount
+        ? typeof was === "number" && was > p.price
+        : true;
 
       return (
         matchSearch &&
@@ -419,14 +458,21 @@ export default function ProductsPage() {
         return arr.sort((a, b) => a.price - b.price);
       case "price-high":
         return arr.sort((a, b) => b.price - a.price);
-      case "rating":
-        return arr.sort((a, b) => toNumber(b.rating) - toNumber(a.rating));
+      case "rating": {
+        return arr.sort(
+          (a, b) =>
+            (getNumberProp(b, "rating") ?? 0) -
+            (getNumberProp(a, "rating") ?? 0)
+        );
+      }
       case "newest":
-        return arr.sort((a, b) => (b.id as number) - (a.id as number));
+        return arr.sort((a, b) => b.id - a.id);
       case "diskon-terbesar":
         return arr.sort((a, b) => {
-          const discA = ((a.was ?? a.price) - a.price) / (a.was ?? a.price);
-          const discB = ((b.was ?? b.price) - b.price) / (b.was ?? b.price);
+          const wasA = getNumberProp(a, "was") ?? a.price;
+          const wasB = getNumberProp(b, "was") ?? b.price;
+          const discA = (wasA - a.price) / wasA;
+          const discB = (wasB - b.price) / wasB;
           return discB - discA;
         });
       default:
@@ -444,7 +490,6 @@ export default function ProductsPage() {
     1,
     Math.ceil(sortedProducts.length / ITEMS_PER_PAGE)
   );
-
   const startFilteredIdx = sortedProducts.length
     ? (currentPage - 1) * ITEMS_PER_PAGE + 1
     : 0;
@@ -533,7 +578,17 @@ export default function ProductsPage() {
         onChange={(e) =>
           setFilter({
             ...filter,
-            priceRange: isPriceRange(e.target.value) ? e.target.value : "all",
+            priceRange: (
+              [
+                "all",
+                "under-100k",
+                "100k-200k",
+                "200k-500k",
+                "above-500k",
+              ] as PriceRange[]
+            ).includes(e.target.value as PriceRange)
+              ? (e.target.value as PriceRange)
+              : "all",
           })
         }
         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
@@ -547,9 +602,9 @@ export default function ProductsPage() {
     </div>
   );
 
+  /* ---------- Render ---------- */
   return (
     <div className="min-h-screen bg-white">
-      {/* Suspense wrapper untuk search params */}
       <Suspense fallback={null}>
         <SearchParamsReader onChange={setSp} />
       </Suspense>
@@ -587,9 +642,9 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {/* Main */}
       <div className="container mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 gap-6 py-8 md:grid-cols-[260px_1fr]">
-          {/* Sidebar filter (desktop) */}
           <aside className="hidden rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:block">
             <SimplifiedFilterBlocks />
           </aside>
@@ -600,9 +655,11 @@ export default function ProductsPage() {
               <div className="text-sm text-gray-700">
                 Showing{" "}
                 <strong>
-                  {startFilteredIdx}-{endFilteredIdx}
+                  {filteredProducts.length
+                    ? `${startFilteredIdx}-${endFilteredIdx}`
+                    : 0}
                 </strong>{" "}
-                of <strong>{sortedProducts.length}</strong> products
+                of <strong>{filteredProducts.length}</strong> products
                 {query ? (
                   <>
                     {" "}
@@ -650,7 +707,9 @@ export default function ProductsPage() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {pageItems.map((product) => {
                   const img = getImageUrl(product);
-                  const ratingNum = toNumber(product.rating);
+                  const ratingNum = getNumberProp(product, "rating") ?? 0;
+                  const totalReviews =
+                    getNumberProp(product, "total_reviews") ?? 0;
 
                   return (
                     <div
@@ -664,6 +723,7 @@ export default function ProductsPage() {
                           width={400}
                           height={533}
                           className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105 grayscale-[10%]"
+                          unoptimized
                         />
                         <div
                           className={clsx(
@@ -711,7 +771,7 @@ export default function ProductsPage() {
                           <div className="flex items-center gap-1">
                             <StarRating value={ratingNum} />
                             <span className="text-xs text-gray-500">
-                              {product.total_reviews ?? 0}
+                              {totalReviews}
                             </span>
                           </div>
                         </div>
@@ -726,13 +786,7 @@ export default function ProductsPage() {
                         )}
                         <div className="mt-4">
                           <Button
-                            onClick={() =>
-                              addToCart(
-                                product,
-                                selectedVariant?.id,
-                                selectedVariant?.price
-                              )
-                            }
+                            onClick={() => openVariantModalFor(product)}
                             className="w-full bg-black text-white hover:bg-gray-800 uppercase tracking-wider font-bold py-2.5 rounded-lg"
                           >
                             Add to Cart
@@ -803,6 +857,15 @@ export default function ProductsPage() {
         </div>
       )}
 
+      <VariantPickerModal
+        open={variantModalOpen}
+        product={variantProduct}
+        onClose={() => setVariantModalOpen(false)}
+        onAdded={() => {
+          // optional: kamu bisa munculkan toast, dll
+        }}
+      />
+
       {/* Product Detail Modal */}
       {isModalOpen && detailProduct && (
         <div
@@ -815,7 +878,6 @@ export default function ProductsPage() {
             className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           />
-
           <div className="relative mx-auto my-6 max-w-5xl p-4 md:p-0">
             <div
               ref={panelRef}
@@ -825,7 +887,11 @@ export default function ProductsPage() {
                 <div className="relative p-0 md:p-4 bg-gray-50">
                   <div className="overflow-hidden">
                     <Image
-                      src={getImageUrl(detailProduct)}
+                      src={
+                        typeof detailProduct.image === "string"
+                          ? detailProduct.image
+                          : IMG_FALLBACK
+                      }
                       alt={`${detailProduct.name} - image 1`}
                       width={500}
                       height={625}
@@ -845,7 +911,11 @@ export default function ProductsPage() {
                       aria-label="Select image 1"
                     >
                       <Image
-                        src={getImageUrl(detailProduct)}
+                        src={
+                          typeof detailProduct.image === "string"
+                            ? detailProduct.image
+                            : IMG_FALLBACK
+                        }
                         alt="thumb 1"
                         width={64}
                         height={64}
@@ -858,10 +928,10 @@ export default function ProductsPage() {
 
                 <div className="relative p-6 md:p-8">
                   <button
-                    ref={closeBtnRef}
                     onClick={() => setIsModalOpen(false)}
                     aria-label="Tutup"
                     className="absolute right-4 top-4 rounded-full p-2 text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                    ref={closeBtnRef}
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -873,11 +943,14 @@ export default function ProductsPage() {
                       </h3>
                       <div className="mt-1 flex items-center gap-2">
                         <StarRating
-                          value={toNumber(detailProduct.rating) ?? 0}
+                          value={getNumberProp(detailProduct, "rating") ?? 0}
                         />
                         <span className="text-sm text-gray-600">
-                          {toNumber(detailProduct.rating).toFixed(1)} •{" "}
-                          {detailProduct.total_reviews ?? 0} reviews
+                          {(
+                            getNumberProp(detailProduct, "rating") ?? 0
+                          ).toFixed(1)}{" "}
+                          • {getNumberProp(detailProduct, "total_reviews") ?? 0}{" "}
+                          reviews
                         </span>
                       </div>
                       <div className="mt-1 text-xs text-gray-500">
@@ -918,9 +991,9 @@ export default function ProductsPage() {
                     )}
                   </div>
 
-                  {detailProduct.description && (
+                  {getStringProp(detailProduct, "description") && (
                     <p className="mt-3 text-sm text-gray-700">
-                      {detailProduct.description}
+                      {getStringProp(detailProduct, "description")}
                     </p>
                   )}
 
@@ -937,7 +1010,7 @@ export default function ProductsPage() {
                           )
                         </div>
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {variants.map((v: ProductVariant) => {
+                          {variants.map((v) => {
                             const selected = selectedVariant?.id === v.id;
                             const vStock = toNumber(v.stock);
                             return (
@@ -1023,9 +1096,8 @@ export default function ProductsPage() {
                       className="col-span-3 inline-flex items-center justify-center rounded-lg bg-black px-4 py-3 text-base font-bold text-white shadow-xl hover:bg-gray-800 transition-colors uppercase tracking-wider disabled:bg-gray-400"
                       onClick={() => {
                         if (currentStock <= 0) return;
-                        if (variants.length > 0 && !selectedVariant) {
+                        if (variants.length > 0 && !selectedVariant)
                           return alert("Pilih varian dulu.");
-                        }
                         addToCart(
                           detailProduct,
                           selectedVariant?.id,

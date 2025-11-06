@@ -359,8 +359,8 @@ export default function NewsPage() {
 
           {/* Subtitle */}
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Dapatkan tips perawatan kulit, rekomendasi produk, dan insight
-            kecantikan untuk menjaga kulit tetap cerah, sehat, dan bercahaya
+            Dapatkan produk terbaik, rekomendasi produk, dan insight
+            produk berkualitas, keren, dan fashionable
             setiap hari.
           </p>
         </div>

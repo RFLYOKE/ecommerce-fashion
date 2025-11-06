@@ -1,28 +1,32 @@
 const translations = {
-  "hero-title-1": "Achieve",
-  "hero-title-2": "Healthy & Glowing Skin",
-  "hero-title-3": "withBLACKBOXINC Shop",
+  "hero-title-1": "Elevate Your",
+  "hero-title-2": "Style — Modern & Elegant",
+  "hero-title-3": "with BLACKBOXINC Shop",
   "hero-subtitle":
-    "Natural Shop, specially formulated to maintain hydration, brighten, and deliver real results for your skin.",
+    "Curated fashion for everyday looks to special occasions—sharp cuts, premium fabrics, and standout details.",
+
   "hero-cta-1": "Shop Now",
   "hero-cta-2": "View Collection",
-  "why-title-1": "Why",
-  "why-item-1-title": "Natural Ingredients",
-  "why-item-2-title": "Dermatology Tested",
-  "why-item-3-title": "Hydrating & Nourishing",
+
+  "why-title-1": "Why Choose Us",
+  "why-item-1-title": "Premium Materials",
+  "why-item-2-title": "Perfect Fit",
+  "why-item-3-title": "Timeless Design",
   "why-item-4-title": "Trusted by Thousands",
-  "why-item-1-content":
-    "Made with high-quality natural ingredients for healthy skin.",
-  "why-item-2-content": "Clinically tested and safe for daily use.",
-  "why-item-3-content": "Moisturizes, brightens, and nourishes facial skin.",
+
+  "why-item-1-content": "Quality fabrics that feel great and last longer.",
+  "why-item-2-content": "Tailored silhouettes designed to flatter your shape.",
+  "why-item-3-content": "Versatile pieces that mix and match across seasons.",
   "why-item-4-content":
-    "Trusted by thousands of users for real and satisfying results.",
-  "cta-title-1": "Start Your Shop",
-  "cta-title-2": "Today",
+    "Loved by thousands of customers with five-star reviews.",
+
+  "cta-title-1": "Upgrade",
+  "cta-title-2": "Your Wardrobe",
   "cta-subtitle":
-    "Feel the fit, confidence, and style with BLACKBOXINC. Discover pieces that suit your vibe.",
+    "Feel the right fit, real confidence, and signature style with BLACKBOXINC. Discover your favorite staples and statement pieces.",
   "cta-btn": "Shop Now",
-  "testimony-title": "What Do They Say?",
+
+  "testimony-title": "What They Say",
 };
 
 export default translations;

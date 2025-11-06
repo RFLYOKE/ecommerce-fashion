@@ -18,7 +18,7 @@ import useCart from "@/hooks/use-cart";
 import { MarqueeBanner } from "../ui/marque-text";
 import clsx from "clsx";
 
-// --- Type Definitions ---
+/* ---------- Types ---------- */
 interface TranslationContent {
   home: string;
   about?: string;
@@ -30,13 +30,12 @@ interface TranslationContent {
   tagline: string;
   switchLanguage: string;
 }
-
 interface Translations {
   id: TranslationContent;
   en: TranslationContent;
 }
 
-// --- Child pembaca search params (dibungkus Suspense) ---
+/* ---------- Suspense-safe reader ---------- */
 function SearchParamsReader({
   onChange,
 }: {
@@ -49,7 +48,7 @@ function SearchParamsReader({
   return null;
 }
 
-// --- Search Engine UI (Reusable Component) ---
+/* ---------- Search UI ---------- */
 function SearchEngine({
   placeholder = "Cari produk, kategori, atau merek…",
   className = "",
@@ -71,7 +70,6 @@ function SearchEngine({
   const [open, setOpen] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
 
-  // Load & persist recent searches
   useEffect(() => {
     try {
       const raw = localStorage.getItem("search:recent");
@@ -146,9 +144,7 @@ function SearchEngine({
     <div
       className={["relative", className].join(" ")}
       onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-          setOpen(false);
-        }
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
       }}
     >
       <form
@@ -242,7 +238,7 @@ function SearchEngine({
   );
 }
 
-// --- Main Header Component ---
+/* ---------- Main Header ---------- */
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -254,7 +250,6 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const pathname = usePathname();
-  // ← pakai state, akan diisi oleh SearchParamsReader dalam Suspense
   const [searchParams, setSearchParams] = useState<URLSearchParams | null>(
     null
   );
@@ -287,38 +282,29 @@ export default function Header() {
       switchLanguage: "Switch to Bahasa",
     },
   };
-
   const t = translations[language];
 
-  // Aktif link (memperhitungkan q dari search params)
+  // === ACTIVE STATE MENU (fix) ===
   const isMenuLinkActive = (href: string) => {
     const currentPath = pathname;
-    const currentQueryQ = searchParams?.get("q") ?? null;
+    const currentQ = searchParams?.get("q") ?? null;
 
     if (href === "/") return currentPath === "/";
 
     if (!href.includes("?")) {
+      if (href === "/product") {
+        // All Products aktif hanya ketika /product tanpa q
+        return currentPath === "/product" && currentQ === null;
+      }
       return currentPath.startsWith(href);
     }
 
+    // Link dengan query (?q=...)
     if (currentPath === "/product" && href.startsWith("/product?")) {
-      const url = new URL(`http://dummy.com${href}`);
-      const menuQueryQ = url.searchParams.get("q");
-      if (menuQueryQ) {
-        return currentQueryQ === menuQueryQ;
-      } else {
-        return currentQueryQ === null;
-      }
+      const url = new URL(`http://dummy${href}`);
+      const menuQ = url.searchParams.get("q"); // "new-arrivals" | "best-seller"
+      return currentQ === menuQ;
     }
-
-    if (
-      href === "/product" &&
-      currentPath === "/product" &&
-      currentQueryQ === null
-    ) {
-      return true;
-    }
-
     return false;
   };
 
@@ -333,16 +319,7 @@ export default function Header() {
     [t]
   );
 
-  const mobileMenuItems = useMemo(
-    () => [
-      { name: t.home, href: "/" },
-      { name: t.products, href: "/product" },
-      { name: t.service, href: "/product?q=new-arrivals" },
-      { name: t.testimonials, href: "/product?q=best-seller" },
-      { name: t.howToOrder, href: "/how-to-order" },
-    ],
-    [t]
-  );
+  const mobileMenuItems = primaryMenuItems;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
@@ -364,7 +341,6 @@ export default function Header() {
     };
   }, []);
 
-  // Tutup panel saat path atau query berubah
   useEffect(() => {
     setIsSearchOpen(false);
     setIsMobileMenuOpen(false);
@@ -373,9 +349,8 @@ export default function Header() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedLanguage = localStorage.getItem("BLACKBOXINC-language");
-      if (savedLanguage === "id" || savedLanguage === "en") {
+      if (savedLanguage === "id" || savedLanguage === "en")
         setLanguage(savedLanguage);
-      }
     }
   }, []);
 
@@ -383,7 +358,6 @@ export default function Header() {
     setIsMobileMenuOpen((v) => !v);
     document.body.style.overflow = !isMobileMenuOpen ? "hidden" : "unset";
   };
-
   const toggleLanguage = () => {
     const newLang = language === "id" ? "en" : "id";
     setLanguage(newLang);
@@ -395,23 +369,15 @@ export default function Header() {
       );
     }
   };
-
-  const handleCartClick = () => {
-    router.push("/cart");
-  };
-
+  const handleCartClick = () => router.push("/cart");
   const handleUserClick = () => {
     if (status === "loading") return;
-    if (session?.user) {
-      router.push("/me");
-    } else {
-      router.push("/login");
-    }
+    if (session?.user) router.push("/me");
+    else router.push("/login");
   };
 
   return (
     <>
-      {/* Suspense wrapper untuk useSearchParams */}
       <Suspense fallback={null}>
         <SearchParamsReader onChange={setSearchParams} />
       </Suspense>
@@ -534,7 +500,7 @@ export default function Header() {
                   >
                     <span>{item.name}</span>
                     {isMenuLinkActive(item.href) && (
-                      <span className="pointer-events-none absolute -bottom-[1px] left-0 h-[1.5px] w-full bg-black transition-all" />
+                      <span className="pointer-events-none absolute -bottom-[1.5px] left-0 h-[1.5px] w-full bg-black transition-all" />
                     )}
                   </Link>
                 ))}
@@ -597,7 +563,6 @@ export default function Header() {
                   <X className="w-6 h-6 text-black" />
                 </button>
               </div>
-
               <SearchEngine
                 className="w-full"
                 placeholder="Cari di Blackboxinc…"

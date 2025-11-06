@@ -1,9 +1,37 @@
+// services/api/product-category.ts
 import { apiSlice } from "./base-query";
-import { Product } from "@/types/admin/product"; 
-import { ProductCategory } from "@/types/master/product-category"; 
+import { Product } from "@/types/admin/product";
+import { ProductCategory } from "@/types/master/product-category";
 
+/* ========= Helpers ========= */
+function addArrayParams<K extends "product_category_id" | "product_merk_id">(
+  base: Record<string, string | number>,
+  key: K,
+  values?: number[]
+) {
+  if (!values || values.length === 0) return base;
+  const withArrays: Record<string, string | number> = { ...base };
+  values.forEach((v, i) => {
+    withArrays[`${key}[${i}]`] = v;
+  });
+  return withArrays;
+}
+
+function sanitizeParams(
+  params: Record<string, string | number | undefined>
+): Record<string, string | number> {
+  const clean: Record<string, string | number> = {};
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== ("" as unknown))
+      clean[k] = v as string | number;
+  });
+  return clean;
+}
+
+/* ========= API ========= */
 export const productCategoryApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // Parent categories
     getCategoryList: builder.query<
       {
         data: ProductCategory[];
@@ -12,15 +40,16 @@ export const productCategoryApi = apiSlice.injectEndpoints({
         total: number;
         per_page: number;
       },
-      { page: number; paginate: number;}
+      { page: number; paginate: number }
     >({
       query: ({ page, paginate }) => ({
-        url: `/public/product-categories?paginate=10&page=1&is_parent=1`,
+        url: `/public/product-categories`,
         method: "GET",
-        params: {
+        params: sanitizeParams({
           page,
           paginate,
-        },
+          is_parent: 1,
+        }),
       }),
       transformResponse: (response: {
         code: number;
@@ -40,8 +69,13 @@ export const productCategoryApi = apiSlice.injectEndpoints({
         per_page: response.data.per_page,
       }),
     }),
-    
-    // 🔍 Get All Product Categories (with pagination)
+
+    /**
+     * Products (full filters)
+     * Contoh pakai sorting backend terbaru/terlaris:
+     * - Terbaru: orderBy: "updated_at", order: "desc"
+     * - Terlaris (sesuai info backend): orderBy: "products.sales", order: "desc"
+     */
     getProductList: builder.query<
       {
         data: Product[];
@@ -50,17 +84,54 @@ export const productCategoryApi = apiSlice.injectEndpoints({
         total: number;
         per_page: number;
       },
-      { page: number; paginate: number; product_merk_id?: number | null }
+      {
+        page: number;
+        paginate: number;
+        orderBy?: string; // e.g. "updated_at" atau "products.sales"
+        order?: "asc" | "desc"; // default diset di pemanggil
+        searchBySpecific?: string;
+        search?: string;
+        product_category_id?: number[]; // dikirim sbg product_category_id[0]=...
+        product_merk_id?: number[]; // dikirim sbg product_merk_id[0]=...
+        shop_id?: number;
+      }
     >({
-      query: ({ page, paginate, product_merk_id }) => ({
-        url: `/public/products`,
-        method: "GET",
-        params: {
+      query: ({
+        page,
+        paginate,
+        orderBy,
+        order,
+        searchBySpecific,
+        search,
+        product_category_id,
+        product_merk_id,
+        shop_id,
+      }) => {
+        // base scalar params
+        let params = sanitizeParams({
           page,
           paginate,
-          product_merk_id
-        },
-      }),
+          orderBy,
+          order,
+          searchBySpecific,
+          search,
+          shop_id,
+        });
+
+        // array params dalam bracket notation
+        params = addArrayParams(
+          params,
+          "product_category_id",
+          product_category_id
+        );
+        params = addArrayParams(params, "product_merk_id", product_merk_id);
+
+        return {
+          url: `/public/products`,
+          method: "GET",
+          params,
+        };
+      },
       transformResponse: (response: {
         code: number;
         message: string;
@@ -80,7 +151,7 @@ export const productCategoryApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    // 🔍 Get Product Category by Slug
+    // Product by slug
     getProductBySlug: builder.query<Product, string>({
       query: (slug) => ({
         url: `/public/products/${slug}`,
@@ -93,6 +164,7 @@ export const productCategoryApi = apiSlice.injectEndpoints({
       }) => response.data,
     }),
 
+    // Variants by slug (shop scope)
     getProductVariantBySlug: builder.query<Product, string>({
       query: (slug) => ({
         url: `/shop/products/${slug}/variants`,

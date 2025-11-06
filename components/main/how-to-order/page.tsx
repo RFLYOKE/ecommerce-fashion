@@ -72,7 +72,7 @@ export default function HowToOrderPage() {
       details: [
         "Browse kategori (T-Shirt, Denim, Aksesori, dll.)",
         "Gunakan fitur 'Size Guide' untuk memastikan fitting yang sempurna",
-        "Lihat detail material dan instruksi perawatan",
+        "Lihat detail material dan instruksi perawatan untuk setiap produk",
         "Pilih warna dan varian yang Anda inginkan",
       ],
       icon: <Ruler className="w-8 h-8" />,

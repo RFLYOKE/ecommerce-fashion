@@ -1,11 +1,11 @@
 import { apiSlice } from "../base-query";
-import { 
-  Transaction, 
+import {
+  Transaction,
   CreateTransactionPayload,
-  CreateTransactionRequest, 
-  CreateTransactionResponse, 
+  CreateTransactionRequest,
+  CreateTransactionResponse,
   CreateTransactionFrontendRequest,
-  CreateTransactionFrontendResponse
+  CreateTransactionFrontendResponse,
 } from "@/types/admin/transaction";
 
 type Shipment = Record<string, unknown>;
@@ -84,7 +84,7 @@ type TransactionStoreDetail = {
 
 export const transactionApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // 🔍 Get All Transaction Categories (with pagination)
+    // 🔍 Get All Transaction (with pagination)
     getTransactionList: builder.query<
       {
         data: Transaction[];
@@ -98,11 +98,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       query: ({ page, paginate, user_id }) => ({
         url: `/transaction`,
         method: "GET",
-        params: {
-          page,
-          paginate,
-          user_id,
-        },
+        params: { page, paginate, user_id },
       }),
       transformResponse: (response: {
         code: number;
@@ -123,7 +119,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    // 🔍 Get Transaction Category by Slug
+    // 🔍 Get by Slug
     getTransactionBySlug: builder.query<Transaction, string>({
       query: (slug) => ({
         url: `/transaction/${slug}`,
@@ -136,6 +132,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }) => response.data,
     }),
 
+    // 🔍 Get by ID
     getTransactionById: builder.query<Transaction, string>({
       query: (id) => ({
         url: `/transaction/${id}`,
@@ -148,10 +145,10 @@ export const transactionApi = apiSlice.injectEndpoints({
       }) => response.data,
     }),
 
-    // ➕ Create Transaction (Updated for checkout payload)
+    // ➕ Create (private)
     createTransaction: builder.mutation<
       CreateTransactionResponse,
-      CreateTransactionRequest 
+      CreateTransactionRequest
     >({
       query: (payload) => ({
         url: `/transaction`,
@@ -170,6 +167,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }),
     }),
 
+    // ➕ Create (frontend JSON to private route)
     createTransactionFrontend: builder.mutation<
       CreateTransactionFrontendResponse,
       CreateTransactionFrontendRequest
@@ -177,10 +175,8 @@ export const transactionApi = apiSlice.injectEndpoints({
       query: (payload) => ({
         url: `/transaction`,
         method: "POST",
-        body: payload, // Send JSON object instead of FormData
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: payload,
+        headers: { "Content-Type": "application/json" },
       }),
       transformResponse: (response: {
         code: number;
@@ -193,7 +189,29 @@ export const transactionApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    // ➕ Create Transaction with FormData (for admin panel if needed)
+    // ✅ NEW: Create (public)
+    createPublicTransaction: builder.mutation<
+      CreateTransactionFrontendResponse,
+      CreateTransactionFrontendRequest
+    >({
+      query: (payload) => ({
+        url: `/public/transaction`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-Type": "application/json" },
+      }),
+      transformResponse: (response: {
+        code: number;
+        message: string;
+        data: CreateTransactionPayload | CreateTransactionPayload[];
+      }): CreateTransactionFrontendResponse => ({
+        success: response.code === 200 || response.code === 201,
+        message: response.message,
+        data: response.data,
+      }),
+    }),
+
+    // ➕ Create with FormData (admin)
     createTransactionFormData: builder.mutation<Transaction, FormData>({
       query: (payload) => ({
         url: `/transaction`,
@@ -207,7 +225,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }) => response.data,
     }),
 
-    // ✏️ Update Transaction Category by Slug
+    // ✏️ Update by Slug
     updateTransaction: builder.mutation<
       Transaction,
       { slug: string; payload: FormData }
@@ -224,7 +242,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }) => response.data,
     }),
 
-    // 🔄 Update Transaction Status by ID
+    // 🔄 Update Status by ID
     updateTransactionStatus: builder.mutation<
       Transaction,
       { id: string; status: number }
@@ -232,9 +250,8 @@ export const transactionApi = apiSlice.injectEndpoints({
       query: ({ id, status }) => ({
         url: `/transaction/${id}`,
         method: "PUT",
-        body: {
-          status,
-        },
+        body: { status },
+        headers: { "Content-Type": "application/json" },
       }),
       transformResponse: (response: {
         code: number;
@@ -243,7 +260,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }) => response.data,
     }),
 
-    // 🔍 Get Transaction Shop Details by ID
+    // 🔍 Shop Details by ID
     getTransactionShopById: builder.query<TransactionStoreDetail, number>({
       query: (id) => ({
         url: `/transaction/shop/${id}`,
@@ -264,13 +281,8 @@ export const transactionApi = apiSlice.injectEndpoints({
       query: ({ id, receipt_code, shipment_status }) => ({
         url: `/transaction/shop/${id}`,
         method: "PUT",
-        body: {
-          receipt_code,
-          shipment_status,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: { receipt_code, shipment_status },
+        headers: { "Content-Type": "application/json" },
       }),
       transformResponse: (response: {
         code: number;
@@ -279,7 +291,7 @@ export const transactionApi = apiSlice.injectEndpoints({
       }) => response,
     }),
 
-    // ❌ Delete Transaction Category by Slug
+    // ❌ Delete by Slug
     deleteTransaction: builder.mutation<
       { code: number; message: string },
       string
@@ -305,7 +317,8 @@ export const {
   useGetTransactionShopByIdQuery,
   useCreateTransactionMutation,
   useCreateTransactionFrontendMutation,
-  useCreateTransactionFormDataMutation, // New export for FormData version
+  useCreatePublicTransactionMutation, // ⬅️ export hook baru
+  useCreateTransactionFormDataMutation,
   useUpdateTransactionMutation,
   useUpdateTransactionStatusMutation,
   useUpdateReceiptCodeMutation,

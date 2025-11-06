@@ -42,21 +42,14 @@ import {
   useGetCurrentUserQuery,
   useCheckShippingCostQuery,
 } from "@/services/auth.service";
-import {
-  useCreateTransactionFrontendMutation,
-  useCreateTransactionMutation,
-} from "@/services/admin/transaction.service";
+import { useCreateTransactionMutation } from "@/services/admin/transaction.service";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
 import { useGetUserAddressListQuery } from "@/services/address.service";
 import type { Address } from "@/types/address";
-import {
-  CreateTransactionFrontendRequest,
-  CreateTransactionRequest,
-  PaymentChannel,
-  PaymentMethod,
-} from "@/types/admin/transaction";
+import { PaymentChannel, PaymentMethod } from "@/types/admin/transaction";
+import { CheckoutDeps } from "@/types/checkout";
+import { useCheckout } from "@/hooks/use-checkout";
 
 const STORAGE_KEY = "cart-storage";
 
@@ -200,7 +193,8 @@ function getImageUrlFromProduct(p: Product): string {
 function mapStoredToView(items: StoredCartItem[]): CartItemView[] {
   return items.map((it) => ({
     id: it.id,
-    product_variant_id: typeof it.product_variant_id === "number" ? it.product_variant_id : 0,
+    product_variant_id:
+      typeof it.product_variant_id === "number" ? it.product_variant_id : 0,
     name: it.name,
     price: it.price,
     originalPrice: undefined,
@@ -213,11 +207,36 @@ function mapStoredToView(items: StoredCartItem[]): CartItemView[] {
   }));
 }
 
-type ErrorBag = Record<string, string[] | string>;
+const GUEST_INFO_KEY = "__guest_checkout_info__";
+
+type GuestInfo = {
+  fullName: string;
+  phone: string;
+  email?: string;
+  address_line_1: string;
+  address_line_2?: string;
+  postal_code: string;
+  rajaongkir_province_id: number;
+  rajaongkir_city_id: number;
+  rajaongkir_district_id: number;
+};
+
+function getGuestInfo(): GuestInfo | null {
+  try {
+    const raw = localStorage.getItem(GUEST_INFO_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as GuestInfo;
+    if (!parsed.fullName || !parsed.address_line_1) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
 
 export default function CartPage() {
   const router = useRouter();
   const { data: session } = useSession();
+  const isLoggedIn = !!session?.user?.email;
 
   const sessionName = useMemo(() => session?.user?.name ?? "", [session]);
 
@@ -225,9 +244,10 @@ export default function CartPage() {
   console.log(cartItems);
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
+  const [paymentType, setPaymentType] = useState<PaymentType>("automatic");
 
-  const [paymentType, setPaymentType] = useState("automatic");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("bank_transfer");
+  const [paymentMethod, setPaymentMethod] =
+    useState<PaymentMethod>("bank_transfer");
   const [paymentChannel, setPaymentChannel] = useState<PaymentChannel>("bca");
 
   const [shippingCourier, setShippingCourier] = useState<string | null>(null);
@@ -238,8 +258,10 @@ export default function CartPage() {
 
   const [shippingInfo, setShippingInfo] = useState({
     fullName: "",
+    email: "",
     phone: "",
     address_line_1: "",
+    address_line_2: "",
     city: "",
     postal_code: "",
     kecamatan: "",
@@ -249,11 +271,48 @@ export default function CartPage() {
   });
 
   const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
   const [hasDefaultAddress, setHasDefaultAddress] = useState(false);
-  const validatePhone = (phone: string) => {
-    const regex = /^(?:\+62|62|0)8\d{8,11}$/;
-    return regex.test(phone);
+
+  const { handleCheckout } = useCheckout();
+
+  const onCheckoutClick = async () => {
+    const deps: CheckoutDeps = {
+      sessionEmail: session?.user?.email ?? null,
+      shippingCourier,
+      shippingMethod,
+      shippingInfo: {
+        fullName: shippingInfo.fullName,
+        phone: shippingInfo.phone,
+        address_line_1: shippingInfo.address_line_1,
+        postal_code: shippingInfo.postal_code,
+        rajaongkir_province_id: shippingInfo.rajaongkir_province_id,
+        rajaongkir_city_id: shippingInfo.rajaongkir_city_id,
+        rajaongkir_district_id: shippingInfo.rajaongkir_district_id,
+        email: shippingInfo.email,
+        address_line_2: shippingInfo.address_line_2,
+      },
+      paymentType,
+      paymentMethod,
+      paymentChannel,
+      clearCart,
+    };
+
+
+    setIsCheckingOut(true);
+    setIsSubmitting(true);
+    try {
+      await handleCheckout(deps);
+    } finally {
+      setIsSubmitting(false);
+      setIsCheckingOut(false);
+    }
   };
+
+  const validatePhone = (phone: string) =>
+    /^(?:\+62|62|0)8\d{8,11}$/.test(phone);
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const { data: currentUserResp } = useGetCurrentUserQuery();
   const currentUser = useMemo(() => currentUserResp || null, [currentUserResp]);
   useEffect(() => {
@@ -264,6 +323,21 @@ export default function CartPage() {
     // }
     setIsPhoneValid(validatePhone(shippingInfo.phone));
   }, [shippingInfo.phone]);
+
+  useEffect(() => {
+    setIsPhoneValid(validatePhone(shippingInfo.phone));
+  }, [shippingInfo.phone]);
+
+  useEffect(() => {
+    // wajib valid hanya kalau belum login
+    setIsEmailValid(
+      isLoggedIn
+        ? true
+        : shippingInfo.email
+        ? validateEmail(shippingInfo.email)
+        : false
+    );
+  }, [shippingInfo.email, isLoggedIn]);
 
   const handleInputChange = (field: string, value: string) => {
     setShippingInfo((prev) => ({ ...prev, [field]: value }));
@@ -285,45 +359,39 @@ export default function CartPage() {
     }
   }, [sessionName]);
 
+  function getGuestInfo() {
+    try {
+      const raw = localStorage.getItem(GUEST_INFO_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
   useEffect(() => {
     if (didPrefill.current) return;
 
-    // Check if user has default address from /me API
-    if (currentUser?.default_address) {
-      const defaultAddr = currentUser.default_address;
-      setShippingInfo((prev) => ({
-        ...prev,
-        phone: currentUser?.phone || "",
-        address_line_1: defaultAddr.address_line_1 ?? prev.address_line_1,
-        postal_code: defaultAddr.postal_code ?? prev.postal_code,
-        rajaongkir_province_id:
-          defaultAddr.rajaongkir_province_id ?? prev.rajaongkir_province_id,
-        rajaongkir_city_id:
-          defaultAddr.rajaongkir_city_id ?? prev.rajaongkir_city_id,
-        rajaongkir_district_id:
-          defaultAddr.rajaongkir_district_id ?? prev.rajaongkir_district_id,
-      }));
-      setHasDefaultAddress(true); // Disable form fields
-      didPrefill.current = true;
+    if (!isLoggedIn && !hasDefaultAddress) {
+      const g = getGuestInfo();
+      if (g) {
+        setShippingInfo((prev) => ({
+          ...prev,
+          fullName: g.fullName || prev.fullName,
+          phone: g.phone || prev.phone,
+          email: g.email || prev.email,
+          address_line_1: g.address_line_1 || prev.address_line_1,
+          address_line_2: g.address_line_2 || prev.address_line_2,
+          postal_code: g.postal_code || prev.postal_code,
+          rajaongkir_province_id:
+            g.rajaongkir_province_id || prev.rajaongkir_province_id,
+          rajaongkir_city_id: g.rajaongkir_city_id || prev.rajaongkir_city_id,
+          rajaongkir_district_id:
+            g.rajaongkir_district_id || prev.rajaongkir_district_id,
+        }));
+      }
     }
-    // Fallback to old address list if no default_address from /me API
-    else if (defaultAddress) {
-      setShippingInfo((prev) => ({
-        ...prev,
-        phone: currentUser?.phone || "",
-        address_line_1: defaultAddress.address_line_1 ?? prev.address_line_1,
-        postal_code: defaultAddress.postal_code ?? prev.postal_code,
-        rajaongkir_province_id:
-          defaultAddress.rajaongkir_province_id ?? prev.rajaongkir_province_id,
-        rajaongkir_city_id:
-          defaultAddress.rajaongkir_city_id ?? prev.rajaongkir_city_id,
-        rajaongkir_district_id:
-          defaultAddress.rajaongkir_district_id ?? prev.rajaongkir_district_id,
-      }));
-      setHasDefaultAddress(true); // Disable form fields
-      didPrefill.current = true;
-    }
-  }, [defaultAddress, currentUser]);
+    didPrefill.current = true;
+  }, [isLoggedIn, hasDefaultAddress]);
 
   const { data: provinces = [], isLoading: loadingProvince } =
     useGetProvincesQuery();
@@ -441,7 +509,7 @@ export default function CartPage() {
   } = useGetProductListQuery({
     page: 1,
     paginate: 6,
-    product_merk_id: null,
+    product_merk_id: undefined,
   });
 
   const relatedProducts: RelatedProductView[] = useMemo(() => {
@@ -491,176 +559,9 @@ export default function CartPage() {
 
   const total = subtotal - discount + shippingCost + codFee;
 
-  const handleCheckout = async () => {
-    setIsCheckingOut(true);
-
-    if (
-      !shippingMethod ||
-      !shippingInfo.fullName ||
-      !shippingInfo.address_line_1 ||
-      !shippingInfo.postal_code ||
-      !isPhoneValid
-    ) {
-      await Swal.fire({
-        icon: "warning",
-        title: "Lengkapi Data",
-        text: "Harap lengkapi semua informasi yang diperlukan untuk melanjutkan.",
-      });
-      setIsCheckingOut(false);
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const stored = parseStorage();
-
-      const payload: CreateTransactionRequest = {
-        address_line_1: shippingInfo.address_line_1,
-        postal_code: shippingInfo.postal_code,
-        payment_type: 'automatic',
-        payment_method: paymentMethod, // "midtrans" | "manual" | "cod"
-        payment_channel: paymentChannel, // "midtrans" | "manual" | "cod"
-        data: [
-          {
-            shop_id: 1,
-            details: stored.map((item) => ({
-              product_id: item.id,
-              product_variant_id: item.id,
-              quantity: item.quantity ?? 1,
-            })),
-            shipment: {
-              parameter: JSON.stringify({
-                destination: String(shippingInfo.rajaongkir_district_id),
-                weight: 1000,
-                height: 0,
-                length: 0,
-                width: 0,
-                diameter: 0,
-                courier: shippingCourier ?? "",
-              }),
-              shipment_detail: JSON.stringify(shippingMethod),
-              courier: shippingCourier ?? "",
-              cost: shippingMethod.cost,
-            },
-            customer_info: {
-              name: shippingInfo.fullName,
-              phone: shippingInfo.phone,
-              address_line_1: shippingInfo.address_line_1,
-              postal_code: shippingInfo.postal_code,
-              province_id: shippingInfo.rajaongkir_province_id,
-              city_id: shippingInfo.rajaongkir_city_id,
-              district_id: shippingInfo.rajaongkir_district_id,
-            },
-          },
-        ],
-      };
-
-      const result = await createTransaction(payload).unwrap();
-      let paymentLink: string | null = null;
-
-        if (result.data && typeof result.data === 'object') {
-            const payment = (result.data as { payment?: { account_number?: string } }).payment;
-            
-            // Cek apakah payment object dan account_number (yang berisi link) tersedia
-            if (payment?.account_number) {
-                paymentLink = payment.account_number;
-            }
-        }
-        
-        if (paymentLink) {
-            await Swal.fire({
-                icon: "success",
-                title: "Pesanan Berhasil Dibuat",
-                text: "Silakan lanjutkan ke halaman pembayaran.",
-                confirmButtonText: "Lanjut ke Pembayaran",
-                confirmButtonColor: "#000000",
-            });
-            
-            // Langsung buka link pembayaran
-            window.open(paymentLink, "_blank");
-
-            clearCart();
-            setTimeout(() => {
-                router.push("/me");
-            }, 2000);
-
-        } else if (
-            result.data &&
-            typeof result.data === "object" &&
-            !Array.isArray(result.data) &&
-            "reference" in result.data
-        ) {
-             // Jika tidak ada payment link (misal: Manual Transfer / COD), tampilkan pesan berhasil dibuat
-             await Swal.fire({
-                icon: "success",
-                title: "Pesanan Dibuat",
-                text: `Pesanan #${(result.data as { reference?: string }).reference} berhasil dibuat. Silakan cek halaman Pesanan Anda.`,
-                confirmButtonText: "Lihat Pesanan Saya",
-                confirmButtonColor: "#000000",
-            });
-            clearCart();
-            router.push("/me");
-        } else {
-            // Fallback pesan jika tidak ada link dan tidak ada reference (kasus tidak terduga)
-             await Swal.fire({
-                icon: "info",
-                title: "Pesanan Dibuat",
-                text: "Pesanan berhasil dibuat, tetapi tidak dapat membuka link pembayaran. Silakan cek profil Anda.",
-                confirmButtonColor: "#000000",
-            });
-        }
-    } catch (err: unknown) {
-      console.error("Error creating transaction:", err);
-
-      let serverMessage =
-        "Terjadi kesalahan saat membuat pesanan. Silakan coba lagi.";
-      let fieldErrors = "";
-
-      if (typeof err === "object" && err !== null) {
-        const apiErr = err as {
-          data?: {
-            message?: string;
-            errors?: Record<string, string[] | string>;
-          };
-        };
-        const genericErr = err as { message?: string };
-
-        if (apiErr.data?.message) {
-          serverMessage = apiErr.data.message;
-        } else if (genericErr.message) {
-          serverMessage = genericErr.message;
-        }
-
-        const rawErrors: Record<string, string[] | string> | undefined =
-          apiErr.data?.errors;
-        if (rawErrors) {
-          fieldErrors = Object.entries(rawErrors)
-            .map(([field, msgs]) => {
-              const list = Array.isArray(msgs) ? msgs : [msgs];
-              return `${field}: ${list.join(", ")}`;
-            })
-            .join("\n");
-        }
-      }
-
-      await Swal.fire({
-        icon: "error",
-        title: "Gagal Membuat Pesanan",
-        html:
-          `<p style="text-align:left">${serverMessage}</p>` +
-          (fieldErrors
-            ? `<pre style="text-align:left;white-space:pre-wrap;background:#f8f9fa;padding:12px;border-radius:8px;margin-top:8px">${fieldErrors}</pre>`
-            : ""),
-      });
-    } finally {
-      setIsSubmitting(false);
-      setIsCheckingOut(false);
-    }
-  };
-
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-white to-[#6B6B6B]/10 pt-24">
+      <div className="min-h-screen w-full bg-gradient-to-br from-white to-[#6B6B6B]/10 pt-12">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-2xl mx-auto text-center py-20">
             <div className="w-32 h-32 bg-[#6B6B6B]/10 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -766,7 +667,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-[#DFF19D]/10 pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-white to-[#DFF19D]/10 pt-12">
       <div className="container mx-auto px-6 lg:px-12 pb-12">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-6">
@@ -859,9 +760,7 @@ export default function CartPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl font-bold text-[#6B6B6B]">
-                          Rp {(item.price * 1).toLocaleString(
-                              "id-ID"
-                            )}
+                          Rp {(item.price * 1).toLocaleString("id-ID")}
                         </span>
                       </div>
 
@@ -988,6 +887,34 @@ export default function CartPage() {
                   )}
                 </div>
 
+                {/* === EMAIL (wajib untuk guest) === */}
+                {!isLoggedIn && (
+                  <div className="col-span-1 sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email <span>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={shippingInfo.email ?? ""}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
+                      placeholder="nama@email.com"
+                      disabled={hasDefaultAddress}
+                      className={`w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#6B6B6B] focus:border-transparent ${
+                        hasDefaultAddress
+                          ? "bg-gray-100 cursor-not-allowed"
+                          : ""
+                      }`}
+                    />
+                    {!isEmailValid && (
+                      <p className="text-sm text-red-500 mt-0.5">
+                        Alamat email tidak valid
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 <div className="col-span-1 sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Alamat Lengkap *
@@ -999,6 +926,26 @@ export default function CartPage() {
                     }
                     rows={3}
                     placeholder="Nama jalan, RT/RW, Kelurahan"
+                    disabled={hasDefaultAddress}
+                    className={`w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#6B6B6B] focus:border-transparent ${
+                      hasDefaultAddress ? "bg-gray-100 cursor-not-allowed" : ""
+                    }`}
+                  />
+                </div>
+
+                {/* === ALAMAT BARIS 2 (opsional) === */}
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Alamat (Baris 2){" "}
+                    <span className="text-gray-400">(opsional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={shippingInfo.address_line_2}
+                    onChange={(e) =>
+                      handleInputChange("address_line_2", e.target.value)
+                    }
+                    placeholder="Blok, unit, patokan, dsb (opsional)"
                     disabled={hasDefaultAddress}
                     className={`w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#6B6B6B] focus:border-transparent ${
                       hasDefaultAddress ? "bg-gray-100 cursor-not-allowed" : ""
@@ -1116,7 +1063,8 @@ export default function CartPage() {
 
                     // ✅ Jika kurir Luar Negeri, paksa non-COD
                     if (val === "international" && paymentType === "cod") {
-                      setPaymentType("midtrans");
+                      setPaymentType("automatic");
+                      setPaymentMethod("qris");
                     }
                   }}
                 >
@@ -1223,100 +1171,108 @@ export default function CartPage() {
                 Metode Pembayaran
               </h3>
 
-                <div className="space-y-4">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tipe Pembayaran
+                    Tipe Pembayaran
                   </label>
                   <div className="space-y-2">
-                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-neutral-50">
-                    <input
-                    type="radio"
-                    name="payment-type"
-                    value="automatic"
-                    checked={paymentType === "automatic"}
-                    onChange={(e) =>
-                      setPaymentType(e.currentTarget.value as PaymentType)
-                    }
-                    className="form-radio text-[#6B6B6B] h-4 w-4"
-                    />
-                    <div>
-                    <p className="font-medium">Otomatis</p>
-                    <p className="text-sm text-gray-500">
-                      Pembayaran online (Gateway)
-                    </p>
-                    </div>
-                  </label>
+                    <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-neutral-50">
+                      <input
+                        type="radio"
+                        name="payment-type"
+                        value="automatic"
+                        checked={paymentType === "automatic"}
+                        onChange={(e) =>
+                          setPaymentType(e.currentTarget.value as PaymentType)
+                        }
+                        className="form-radio text-[#6B6B6B] h-4 w-4"
+                      />
+                      <div>
+                        <p className="font-medium">Otomatis</p>
+                        <p className="text-sm text-gray-500">
+                          Pembayaran online (Gateway)
+                        </p>
+                      </div>
+                    </label>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Metode Pembayaran
+                    Metode Pembayaran
                   </label>
                   <div className="space-y-2">
-                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-neutral-50">
-                    <input
-                    type="radio"
-                    name="payment-method"
-                    value="bank_transfer"
-                    checked={paymentMethod === "bank_transfer"}
-                    onChange={(e) => setPaymentMethod(e.currentTarget.value as PaymentMethod)}
-                    className="form-radio text-[#6B6B6B] h-4 w-4"
-                    />
-                    <div>
-                    <p className="font-medium">Bank Transfer</p>
-                    <p className="text-sm text-gray-500">
-                      Transfer ke rekening bank
-                    </p>
-                    </div>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-neutral-50">
-                    <input
-                    type="radio"
-                    name="payment-method"
-                    value="qris"
-                    checked={paymentMethod === "qris"}
-                    onChange={(e) => setPaymentMethod(e.currentTarget.value as PaymentMethod)}
-                    className="form-radio text-[#6B6B6B] h-4 w-4"
-                    />
-                    <div>
-                    <p className="font-medium">QRIS</p>
-                    <p className="text-sm text-gray-500">
-                      Pembayaran via QRIS
-                    </p>
-                    </div>
-                  </label>
+                    <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-neutral-50">
+                      <input
+                        type="radio"
+                        name="payment-method"
+                        value="bank_transfer"
+                        checked={paymentMethod === "bank_transfer"}
+                        onChange={(e) =>
+                          setPaymentMethod(
+                            e.currentTarget.value as PaymentMethod
+                          )
+                        }
+                        className="form-radio text-[#6B6B6B] h-4 w-4"
+                      />
+                      <div>
+                        <p className="font-medium">Bank Transfer</p>
+                        <p className="text-sm text-gray-500">
+                          Transfer ke rekening bank
+                        </p>
+                      </div>
+                    </label>
+                    <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors hover:bg-neutral-50">
+                      <input
+                        type="radio"
+                        name="payment-method"
+                        value="qris"
+                        checked={paymentMethod === "qris"}
+                        onChange={(e) =>
+                          setPaymentMethod(
+                            e.currentTarget.value as PaymentMethod
+                          )
+                        }
+                        className="form-radio text-[#6B6B6B] h-4 w-4"
+                      />
+                      <div>
+                        <p className="font-medium">QRIS</p>
+                        <p className="text-sm text-gray-500">
+                          Pembayaran via QRIS
+                        </p>
+                      </div>
+                    </label>
                   </div>
                 </div>
 
                 {paymentMethod === "bank_transfer" && (
                   <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Pilih Bank
-                  </label>
-                  <Select
-                    value={paymentChannel}
-                    onValueChange={(val) =>
-                    setPaymentChannel(val as PaymentChannel)
-                    }
-                  >
-                    <SelectTrigger>
-                    <SelectValue placeholder="Pilih Bank" />
-                    </SelectTrigger>
-                    <SelectContent>
-                    <SelectItem value="bnc">BNC</SelectItem>
-                    <SelectItem value="bjb">BJB</SelectItem>
-                    <SelectItem value="bca">BCA</SelectItem>
-                    <SelectItem value="bni">BNI</SelectItem>
-                    <SelectItem value="bsi">BSI</SelectItem>
-                    <SelectItem value="bss">BSS</SelectItem>
-                    <SelectItem value="cimb">CIMB</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Pilih Bank
+                    </label>
+                    <Select
+                      value={paymentChannel}
+                      onValueChange={(val) =>
+                        setPaymentChannel(val as PaymentChannel)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih Bank" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="bnc">BNC</SelectItem>
+                        <SelectItem value="bjb">BJB</SelectItem>
+                        <SelectItem value="bca">BCA</SelectItem>
+                        <SelectItem value="bni">BNI</SelectItem>
+                        <SelectItem value="bsi">BSI</SelectItem>
+                        <SelectItem value="bss">BSS</SelectItem>
+                        <SelectItem value="cimb">CIMB</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 )}
-                </div>
+              </div>
             </div>
 
             <div className="bg-white rounded-3xl p-6 shadow-lg hidden">
@@ -1421,7 +1377,7 @@ export default function CartPage() {
                 </div>
               </div>
               <button
-                onClick={handleCheckout}
+                onClick={onCheckoutClick}
                 disabled={
                   isCheckingOut ||
                   isSubmitting ||
@@ -1431,7 +1387,8 @@ export default function CartPage() {
                   !shippingInfo.address_line_1 ||
                   !shippingInfo.postal_code ||
                   !isPhoneValid ||
-                  !paymentType
+                  !paymentType ||
+                  (!isLoggedIn && !isEmailValid)
                 }
                 className="w-full bg-[#6B6B6B] text-white py-4 rounded-2xl font-semibold hover:bg-[#6B6B6B]/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >

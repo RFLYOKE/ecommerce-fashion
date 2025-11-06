@@ -1,27 +1,31 @@
 const translations = {
-  "hero-title-1": "Raih Kulit",
-  "hero-title-2": "Sehat & Bersinar",
-  "hero-title-3": "denganBLACKBOXINC Shop",
+  "hero-title-1": "Tingkatkan Gaya",
+  "hero-title-2": "Elegan & Modern",
+  "hero-title-3": "bersama BLACKBOXINC Shop",
   "hero-subtitle":
-    "Perawatan kulit alami, diformulasikan khusus untuk menjaga kelembapan, mencerahkan, dan memberikan hasil nyata pada kulit Anda.",
+    "Koleksi fashion pilihan untuk tampilan harian hingga special occasion — potongan rapi, material premium, dan detail yang memikat.",
   "hero-cta-1": "Belanja Sekarang",
   "hero-cta-2": "Lihat Koleksi",
-  "why-title-1": "Mengapa",
-  "why-item-1-title": "Natural Ingredients",
-  "why-item-2-title": "Dermatology Tested",
-  "why-item-3-title": "Hydrating & Nourishing",
+
+  "why-title-1": "Mengapa Memilih Kami",
+  "why-item-1-title": "Premium Materials",
+  "why-item-2-title": "Perfect Fit",
+  "why-item-3-title": "Timeless Design",
   "why-item-4-title": "Trusted by Thousands",
-  "why-item-1-content":
-    "Dibuat dengan bahan alami berkualitas tinggi untuk kulit sehat.",
-  "why-item-2-content": "Telah diuji klinis dan aman digunakan setiap hari.",
-  "why-item-3-content": "Melembapkan, mencerahkan, dan menutrisi kulit wajah.",
+  "why-item-1-content": "Material berkualitas, nyaman dipakai, dan tahan lama.",
+  "why-item-2-content":
+    "Potongan dirancang untuk jatuh lebih pas dan flattering.",
+  "why-item-3-content":
+    "Desain versatile yang mudah dipadu-padankan lintas musim.",
   "why-item-4-content":
-    "Dipercaya ribuan pengguna untuk hasil nyata dan memuaskan.",
-  "cta-title-1": "Mulai Perawatan Kulitmu",
-  "cta-title-2": "Hari Ini",
+    "Dipercaya ribuan pelanggan dengan ulasan bintang lima.",
+
+  "cta-title-1": "Upgrade",
+  "cta-title-2": "Wardrobe-mu",
   "cta-subtitle":
-    "Rasakan fit, percaya diri, dan gaya bersama BLACKBOXINC. Temukan busana yang paling pas untukmu.",
+    "Rasakan fit yang tepat, percaya diri, dan gaya khas bersama BLACKBOXINC. Temukan staples dan statement pieces favoritmu.",
   "cta-btn": "Belanja Sekarang",
+
   "testimony-title": "Apa Kata Mereka?",
 };
 
