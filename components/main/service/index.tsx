@@ -5,7 +5,6 @@ import { Sparkles } from "lucide-react";
 import Image from "next/image";
 import ReservationModal from "./reservation-modal";
 import { useGetProductListQuery } from "@/services/product.service";
-import DotdLoader from "@/components/loader/3dot";
 
 interface Service {
   id: number;
@@ -19,28 +18,58 @@ interface Service {
   merk_name: string;
 }
 
+type Maybe<T> = T | null | undefined;
+
+interface ShopProduct {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  duration?: Maybe<number | string>;
+  category_name: string;
+  merk_name: string;
+  image?: Maybe<string>;
+  image_2?: Maybe<string>;
+  image_3?: Maybe<string>;
+  image_4?: Maybe<string>;
+  image_5?: Maybe<string>;
+  image_6?: Maybe<string>;
+  image_7?: Maybe<string>;
+}
+
+interface Paginated<T> {
+  data: T[];
+  last_page?: number;
+}
+
+// helper type predicate untuk filter gambar
+const isNonEmptyString = (v: Maybe<string>): v is string =>
+  typeof v === "string" && v.trim() !== "";
+
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch services from API
-  const { data: shopProductsData, isLoading, error } = useGetProductListQuery({
+  // ✅ product_merk_id harus array
+  const {
+    data: shopProductsData,
+    isLoading,
+    error,
+  } = useGetProductListQuery({
     page: currentPage,
-    paginate: 9, // Tampilkan 9 layanan per halaman
-    product_merk_id: 2
+    paginate: 9,
+    product_merk_id: [2], // ← perbaikan: number[] bukan number
   });
 
-  // Transform API data to Service format
-  const services = useMemo(() => {
-    if (!shopProductsData?.data) return [];
-    
-    return shopProductsData.data
-      .filter(product => product.merk_name?.toLowerCase() === "jasa") // Only show Jasa services
-      .map(product => {
-        
-        // Build images array with proper filtering
-        const images = [
+  const services = useMemo<Service[]>(() => {
+    const paged = shopProductsData as Paginated<ShopProduct> | undefined;
+    if (!paged?.data) return [];
+
+    return paged.data
+      .filter((product) => product.merk_name?.toLowerCase() === "jasa")
+      .map((product) => {
+        const imagesSrc: string[] = [
           product.image,
           product.image_2,
           product.image_3,
@@ -48,22 +77,27 @@ export default function ServicesPage() {
           product.image_5,
           product.image_6,
           product.image_7,
-        ].filter(img => typeof img === "string" && img.trim() !== ""); // Remove empty or null images
-        
-        // Get fallback image based on category
+        ].filter(isNonEmptyString);
+
         const getFallbackImage = (categoryName: string) => {
           const category = categoryName?.toLowerCase();
-          if (category?.includes('facial')) return "/images/new/services/facial-treatment.jpg";
-          if (category?.includes('peeling')) return "/images/new/services/chemical-peeling.webp";
-          if (category?.includes('microdermabrasion')) return "/images/new/services/microdermabrasion.webp";
-          if (category?.includes('whitening')) return "/images/new/services/whitening-treatment.jpg";
-          return "/images/new/services/facial-treatment.jpg"; // default fallback
+          if (category?.includes("facial"))
+            return "/images/new/services/facial-treatment.jpg";
+          if (category?.includes("peeling"))
+            return "/images/new/services/chemical-peeling.webp";
+          if (category?.includes("microdermabrasion"))
+            return "/images/new/services/microdermabrasion.webp";
+          if (category?.includes("whitening"))
+            return "/images/new/services/whitening-treatment.jpg";
+          return "/images/new/services/facial-treatment.jpg";
         };
 
         return {
           id: product.id,
-          thumbnail: typeof product.image === "string" ? product.image : getFallbackImage(product.category_name),
-          images: images.map(img => ({ image: typeof img === "string" ? img : "" })),
+          thumbnail: isNonEmptyString(product.image)
+            ? product.image
+            : getFallbackImage(product.category_name),
+          images: imagesSrc.map((img) => ({ image: img })),
           name: product.name,
           description: product.description,
           price: product.price,
@@ -74,11 +108,13 @@ export default function ServicesPage() {
       });
   }, [shopProductsData]);
 
-  // Pagination logic
-  const totalPages = useMemo(() => shopProductsData?.last_page ?? 1, [shopProductsData]);
-  
+  const totalPages = useMemo(
+    () => shopProductsData?.last_page ?? 1,
+    [shopProductsData]
+  );
+
   const getImageUrl = (p: Service): string => {
-    if (typeof p.thumbnail === "string" && p.thumbnail) return p.thumbnail;
+    if (p.thumbnail) return p.thumbnail;
     const media = (p as unknown as { media?: Array<{ original_url: string }> })
       .media;
     if (Array.isArray(media) && media.length > 0 && media[0]?.original_url) {
@@ -93,31 +129,30 @@ export default function ServicesPage() {
   };
 
   const renderPaginationButtons = () => {
-    const pageButtons = [];
+    const pageButtons: Array<number | "..."> = [];
     const maxButtons = 5;
-    
-    // Logic to render a limited number of page buttons with ellipses
+
     if (totalPages <= maxButtons) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageButtons.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pageButtons.push(i);
     } else {
       pageButtons.push(1);
-      if (currentPage > 3) {
-        pageButtons.push("...");
-      }
-      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+      if (currentPage > 3) pageButtons.push("...");
+      for (
+        let i = Math.max(2, currentPage - 1);
+        i <= Math.min(totalPages - 1, currentPage + 1);
+        i++
+      ) {
         pageButtons.push(i);
       }
-      if (currentPage < totalPages - 2) {
-        pageButtons.push("...");
-      }
+      if (currentPage < totalPages - 2) pageButtons.push("...");
       pageButtons.push(totalPages);
     }
 
     return pageButtons.map((page, index) =>
       page === "..." ? (
-        <span key={index} className="px-4 py-2 text-[#6B6B6B]">...</span>
+        <span key={index} className="px-4 py-2 text-[#6B6B6B]">
+          ...
+        </span>
       ) : (
         <button
           key={page}
@@ -136,49 +171,42 @@ export default function ServicesPage() {
 
   return (
     <section className="bg-white min-h-screen">
-      {/* Hero Section - Layanan Perawatan */}
+      {/* Hero */}
       <section className="pt-24 pb-16 px-6 lg:px-12 bg-gradient-to-r from-white via-[#F5F5F5] to-[#FFEAEA]">
         <div className="container mx-auto text-center text-[#6B6B6B]">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-[#E53935]/10 px-4 py-2 rounded-full mb-6">
             <Sparkles className="w-4 h-4 text-[#E53935]" />
             <span className="text-sm font-medium">Layanan Perawatan Kulit</span>
           </div>
-
-          {/* Title */}
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Rawat Kulitmu
             <span className="block text-[#E53935]">
               Dengan Sentuhan Profesional
             </span>
           </h1>
-
-          {/* Subtitle */}
           <p className="text-xl text-[#6B6B6B] max-w-3xl mx-auto mb-8">
             Nikmati berbagai layanan perawatan kulit seperti facial, peeling,
             dan treatment eksklusif lainnya untuk menjaga kesehatan dan
             kecantikan kulit Anda.
           </p>
-
-          {/* Tags */}
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow">
-              <div className="w-3 h-3 rounded-full bg-[#E53935]"></div>
+              <div className="w-3 h-3 rounded-full bg-[#E53935]" />
               <span>Facial</span>
             </div>
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow">
-              <div className="w-3 h-3 rounded-full bg-[#6B6B6B]"></div>
+              <div className="w-3 h-3 rounded-full bg-[#6B6B6B]" />
               <span>Peeling</span>
             </div>
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow">
-              <div className="w-3 h-3 rounded-full bg-[#E53935]"></div>
+              <div className="w-3 h-3 rounded-full bg-[#E53935]" />
               <span>Treatment Eksklusif</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* Grid */}
       <div id="services" className="container mx-auto px-6 lg:px-12 py-16">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
@@ -197,12 +225,12 @@ export default function ServicesPage() {
                 key={i}
                 className="bg-white border border-[#6B6B6B]/20 rounded-3xl shadow-md p-6 animate-pulse"
               >
-                <div className="w-full h-48 bg-gray-200 rounded-t-2xl mb-3"></div>
-                <div className="h-6 bg-gray-200 rounded mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded mb-4 w-1/2"></div>
-                <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                <div className="w-full h-48 bg-gray-200 rounded-t-2xl mb-3" />
+                <div className="h-6 bg-gray-200 rounded mb-3" />
+                <div className="h-4 bg-gray-200 rounded mb-2" />
+                <div className="h-4 bg-gray-200 rounded mb-2" />
+                <div className="h-4 bg-gray-200 rounded mb-4 w-1/2" />
+                <div className="h-6 bg-gray-200 rounded w-1/3" />
               </div>
             ))}
           </div>
@@ -238,23 +266,23 @@ export default function ServicesPage() {
                     width={400}
                     height={225}
                     alt={service.name}
-                    unoptimized={true}
+                    unoptimized
                     onError={(e) => {
-                      // Get fallback image based on category
                       const getFallbackImage = (categoryName: string) => {
                         const category = categoryName?.toLowerCase();
-                        if (category?.includes('facial')) return "/images/new/services/facial-treatment.jpg";
-                        if (category?.includes('peeling')) return "/images/new/services/chemical-peeling.webp";
-                        if (category?.includes('microdermabrasion')) return "/images/new/services/microdermabrasion.webp";
-                        if (category?.includes('whitening')) return "/images/new/services/whitening-treatment.jpg";
+                        if (category?.includes("facial"))
+                          return "/images/new/services/facial-treatment.jpg";
+                        if (category?.includes("peeling"))
+                          return "/images/new/services/chemical-peeling.webp";
+                        if (category?.includes("microdermabrasion"))
+                          return "/images/new/services/microdermabrasion.webp";
+                        if (category?.includes("whitening"))
+                          return "/images/new/services/whitening-treatment.jpg";
                         return "/images/new/services/facial-treatment.jpg";
                       };
-                      e.currentTarget.src = getFallbackImage(service.category_name);
+                      (e.currentTarget as HTMLImageElement).src =
+                        getFallbackImage(service.category_name);
                     }}
-                    onLoad={() => {
-                      console.log("Image loaded successfully for", service.name);
-                    }}
-                    // Add priority for above-the-fold images
                     priority={false}
                   />
                   <div className="flex items-center gap-2 mb-2">
@@ -287,11 +315,11 @@ export default function ServicesPage() {
         )}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mb-12">
           <button
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
             className="px-4 py-2 rounded-lg border border-[#6B6B6B] text-[#6B6B6B] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E53935] hover:text-white transition-colors"
           >
@@ -299,7 +327,9 @@ export default function ServicesPage() {
           </button>
           {renderPaginationButtons()}
           <button
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+            }
             disabled={currentPage === totalPages}
             className="px-4 py-2 rounded-lg border border-[#6B6B6B] text-[#6B6B6B] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E53935] hover:text-white transition-colors"
           >
@@ -308,7 +338,6 @@ export default function ServicesPage() {
         </div>
       )}
 
-      {/* Reservation Modal */}
       <ReservationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

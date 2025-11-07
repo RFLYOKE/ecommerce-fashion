@@ -301,7 +301,7 @@ export default function ProductSale() {
       </div>
 
       {/* Product Cards Grid */}
-      <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mt-8 grid gap-x-6 gap-y-10 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((p) => {
           const hasDiscount = typeof p.was === "number" && p.was > p.price;
           const disc = hasDiscount

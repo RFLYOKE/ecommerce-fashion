@@ -269,7 +269,7 @@ export default function Header() {
       service: "Barang Baru",
       howToOrder: "Cara Pemesanan",
       testimonials: "Penjualan Terbaik",
-      tagline: "Gaya Terdefinisikan. Kualitas Tanpa Kompromi",
+      tagline: "ORIGINAL EST 2018",
       switchLanguage: "Ganti ke English",
     },
     en: {
@@ -278,7 +278,7 @@ export default function Header() {
       service: "New Arrival",
       howToOrder: "How to Order",
       testimonials: "Best Seller",
-      tagline: "Style Defined. Quality Uncompromised",
+      tagline: "ORIGINAL EST 2018",
       switchLanguage: "Switch to Bahasa",
     },
   };
@@ -393,7 +393,7 @@ export default function Header() {
       >
         <MarqueeBanner
           message={
-            "DISKON AKHIR TAHUN • GRATIS ONGKIR SELURUH INDONESIA • KATALOG BARU RILIS HARI INI"
+            "NEW ARRIVAL • SALE UP TO 70% • GRATIS ONGKIR"
           }
           size="sm"
           speed={60}
@@ -452,7 +452,7 @@ export default function Header() {
                 className="group inline-flex flex-col items-center text-center select-none"
               >
                 <h1 className="font-extrabold tracking-[0.2em] text-black text-lg md:text-xl leading-none">
-                  BLACKBOXINC
+                  BLACKBOX.INC
                 </h1>
                 <span className="mt-1 text-[8px] md:text-[10px] uppercase tracking-[0.3em] text-gray-600">
                   {t.tagline}

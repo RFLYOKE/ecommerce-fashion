@@ -12,10 +12,10 @@ import RunningCarousel from "./running-carousel";
 const HomePage = () => {
   return (
     <>
-      <Campaign />
-      <div className="w-full p-2">
+      <div className="w-full p-2 md:mt-10">
         <RunningCarousel />
       </div>
+      <Campaign />
       <div className="px-10">
         <AboutStore />
         <NewArrivalGrid />
