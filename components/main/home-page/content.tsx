@@ -147,7 +147,7 @@ export default function HomePage() {
     data: productList,
     isLoading: isProductsLoading,
     isError: isProductsError,
-  } = useGetProductListQuery({ page: 1, paginate: 3, product_merk_id: null });
+  } = useGetProductListQuery({ page: 1, paginate: 3 });
 
   const topProducts: Product[] = useMemo(
     () => productList?.data ?? [],
