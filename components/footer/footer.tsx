@@ -48,14 +48,12 @@ export default function Footer() {
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
     { name: "Shop", href: "/product" },
-    { name: "Best Sellers", href: "/best-seller" },
+    { name: "Best Sellers", href: "/product?q=best-seller" },
     { name: "Contact", href: "/contact" },
   ];
 
   // Tautan Layanan Pelanggan
   const serviceLinks = [
-    { name: "Shipping & Returns", href: "/shipping" },
-    { name: "Size Guide", href: "/size-guide" },
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms & Conditions", href: "/terms" },
   ];
@@ -84,13 +82,14 @@ export default function Footer() {
         <div className="pt-16 pb-10 px-6 lg:px-12">
           <div className="container mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
-              
               {/* Kolom 1: Company Info & Values (lg:col-span-2) */}
               <div className="col-span-2 lg:col-span-2">
                 <BrandLogo />
-                
+
                 <p className="text-sm text-gray-700 leading-relaxed mt-4 mb-4 max-w-sm">
-                  Curating timeless fashion pieces with uncompromising quality and sleek, modern design. Elevate your wardrobe with Blackboxinc.
+                  Curating timeless fashion pieces with uncompromising quality
+                  and sleek, modern design. Elevate your wardrobe with
+                  Blackboxinc.
                 </p>
 
                 {/* Values - Minimalist B&W */}
@@ -113,13 +112,11 @@ export default function Footer() {
                 <div className="space-y-3 text-sm border-t border-gray-100 pt-4">
                   <div className="flex items-start gap-3">
                     <MapPin className="w-4 h-4 mt-1 text-black flex-shrink-0" />
-                    <span>
-                      Jalan raya Lohbener depan kantor PEMBAYARAN PDAM LOHBENER celeng RT 18/RW 05, Lohbener, Indramayu
-                    </span>
+                    <span>Jatijajar Depok Jawa barat 16455</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone className="w-4 h-4 text-black" />
-                    <span>+62 877 2666 6394</span>
+                    <span>+62 895 6227 17884</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Mail className="w-4 h-4 text-black" />
@@ -140,7 +137,7 @@ export default function Footer() {
                         href={link.href}
                         className="text-gray-700 hover:text-black transition-colors relative group"
                       >
-                         <span className="group-hover:translate-x-1 transition-transform inline-block">
+                        <span className="group-hover:translate-x-1 transition-transform inline-block">
                           {link.name}
                         </span>
                         <span className="absolute left-0 bottom-0 h-[1px] w-0 bg-black transition-all duration-300 group-hover:w-full" />
@@ -149,9 +146,9 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              
+
               {/* Kolom 3: Customer Service Links */}
-               <div className="col-span-1">
+              <div className="col-span-1">
                 <h4 className="text-base font-extrabold mb-4 text-black uppercase tracking-wider">
                   Support
                 </h4>
@@ -162,7 +159,7 @@ export default function Footer() {
                         href={link.href}
                         className="text-gray-700 hover:text-black transition-colors relative group"
                       >
-                         <span className="group-hover:translate-x-1 transition-transform inline-block">
+                        <span className="group-hover:translate-x-1 transition-transform inline-block">
                           {link.name}
                         </span>
                         <span className="absolute left-0 bottom-0 h-[1px] w-0 bg-black transition-all duration-300 group-hover:w-full" />
@@ -171,7 +168,6 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-
 
               {/* Kolom 4: FAQ (Accordion) */}
               <div className="col-span-2 md:col-span-4 lg:col-span-1">
@@ -227,15 +223,17 @@ export default function Footer() {
         <div className="border-t border-gray-200 bg-gray-50">
           <div className="container mx-auto px-6 lg:px-12 py-6">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
-              
               {/* Copyright */}
               <p className="text-sm text-gray-600">
-                © {new Date().getFullYear()} **BLACKBOXINC**. All rights reserved.
+                © {new Date().getFullYear()} **BLACKBOXINC**. All rights
+                reserved.
               </p>
 
               {/* Social Media */}
               <div className="flex items-center gap-6">
-                <p className="text-gray-600 text-sm hidden sm:block">Follow Us:</p>
+                <p className="text-gray-600 text-sm hidden sm:block">
+                  Follow Us:
+                </p>
                 <div className="flex gap-3">
                   {/* Social Icons: B&W Style */}
                   <a
